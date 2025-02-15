@@ -53,10 +53,10 @@ class _PasswordInputFieldWidgetState extends State<PasswordInputFieldWidget> {
       ),
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return 'Please enter a password';
+          return 'Por favor ingrese una contraseña';
         }
-        if (value.length < 6) {
-          return 'Password must be at least 6 characters';
+        if (value.length < 3) {
+          return 'La contraseña debe tener al menos 3 caracteres';
         }
         return null;
       },
