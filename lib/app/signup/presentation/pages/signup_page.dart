@@ -17,6 +17,7 @@ class SignupPage extends StatelessWidget {
     //password
     //confirm password
     //imageProfileUrl
+    //imageview render before url
     //sign up button
     return SafeArea(
       child: Scaffold(
