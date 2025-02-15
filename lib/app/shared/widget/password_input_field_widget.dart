@@ -30,7 +30,7 @@ class _PasswordInputFieldWidgetState extends State<PasswordInputFieldWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
+    return TextField(
       controller: widget.controller,
       obscureText: !_passwordVisible, // Toggle password visibility
       decoration: InputDecoration(
@@ -51,15 +51,6 @@ class _PasswordInputFieldWidgetState extends State<PasswordInputFieldWidget> {
           borderRadius: BorderRadius.circular(10),
         ),
       ),
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'Por favor ingrese una contraseña';
-        }
-        if (value.length < 3) {
-          return 'La contraseña debe tener al menos 3 caracteres';
-        }
-        return null;
-      },
     );
   }
 }
