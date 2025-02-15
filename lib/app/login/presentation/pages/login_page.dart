@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:storeapp/app/shared/widget/password_input_field_widget.dart';
+import 'package:storeapp/app/util/keyboard_util.dart';
 import 'package:storeapp/app/util/log.dart';
 
 class LoginPage extends StatelessWidget {
-  static const String _tag = 'LoginPage';
+  static const String name = 'loginPage';
+  static const String _tag = name;
+  static const String link = '/$name';
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -14,6 +17,19 @@ class LoginPage extends StatelessWidget {
     //safeArea: widget in Flutter is crucial for handling situations where parts of your app's UI might be obscured by system elements like the status bar, notches, or other intrusions.
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.blue,
+          title: Center(
+            child: Text(
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+              'Inicio de Sesión',
+            ),
+          ),
+        ),
         //add scroll to body
         body: Column(
           spacing: 20,
@@ -41,24 +57,14 @@ class HeaderLoginWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 250.0,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Image.network(
             'https://picsum.photos/600/700?random=1',
             width: double.infinity,
-            height: 200,
+            height: 150,
             fit: BoxFit.fitWidth,
-          ),
-          Text(
-            'Inicio de Sesión',
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
           ),
         ],
       ),
@@ -94,6 +100,9 @@ class BodyLoginWidget extends StatelessWidget {
               icon: Icon(Icons.person),
               labelText: 'Usuario',
               hintText: 'Ingrese su usuario',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
             ),
           ),
           PasswordInputFieldWidget(
@@ -104,6 +113,7 @@ class BodyLoginWidget extends StatelessWidget {
           ),
           FilledButton(
             onPressed: () {
+              KeyboardUtil.hide(context);
               Log.d(
                   _tag,
                   'Login button pressed username: ${_usernameController.text} '
