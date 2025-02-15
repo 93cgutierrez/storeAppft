@@ -11,6 +11,13 @@ class SignupPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //TODO: 20250213 homework
+    //name
+    //email
+    //password
+    //confirm password
+    //imageProfileUrl
+    //sign up button
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(

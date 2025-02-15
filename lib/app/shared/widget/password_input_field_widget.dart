@@ -41,9 +41,13 @@ class _PasswordInputFieldWidgetState extends State<PasswordInputFieldWidget> {
           icon: Icon(
             _passwordVisible ? Icons.visibility : Icons.visibility_off,
           ),
-          onPressed: () {
+          onPressed: () async {
             setState(() {
               _passwordVisible = !_passwordVisible;
+            });
+            await Future.delayed(Duration(seconds: 5));
+            setState(() {
+              _passwordVisible = false;
             });
           },
         ),
