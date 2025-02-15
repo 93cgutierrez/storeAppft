@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:storeapp/app/shared/widget/password_input_field_widget.dart';
 import 'package:storeapp/app/util/log.dart';
 
 class LoginPage extends StatelessWidget {
@@ -13,45 +14,18 @@ class LoginPage extends StatelessWidget {
     //safeArea: widget in Flutter is crucial for handling situations where parts of your app's UI might be obscured by system elements like the status bar, notches, or other intrusions.
     return SafeArea(
       child: Scaffold(
+        //add scroll to body
         body: Column(
           spacing: 20,
           children: [
             HeaderLoginWidget(),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 32.0),
-              child: Column(
-                spacing: 20,
-                children: [
-                  TextField(
-                    controller: _usernameController,
-                    decoration: InputDecoration(
-                      icon: Icon(Icons.person),
-                      labelText: 'Usuario',
-                      hintText: 'Ingrese su usuario',
-                    ),
-                  ),
-                  PasswordInputField(
-                    controller: _passwordController,
-                    icon: Icon(Icons.key),
-                    labelText: 'Contraseña',
-                    hintText: 'Ingrese su contraseña',
-                  ),
-                  Text(
-                    '¿No tienes una cuenta?',
-                    style: TextStyle(
-                      color: Colors.blue,
-                    ),
-                  ),
-                  FilledButton(
-                    onPressed: () {
-                      Log.d(_tag,
-                          'Login button pressed username: ${_usernameController.text} password: ${_passwordController.text}');
-                    },
-                    child: Text('Inicio de Sesión'),
-                  ),
-                ],
-              ),
+            Expanded(
+              child: BodyLoginWidget(
+                  usernameController: _usernameController,
+                  passwordController: _passwordController,
+                  tag: _tag),
             ),
+            FooterLoginWidget(tag: _tag),
           ],
         ),
       ),
@@ -72,7 +46,7 @@ class HeaderLoginWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Image.network(
-            'https://picsum.photos/200/300?random=1',
+            'https://picsum.photos/600/700?random=1',
             width: double.infinity,
             height: 200,
             fit: BoxFit.fitWidth,
@@ -92,63 +66,96 @@ class HeaderLoginWidget extends StatelessWidget {
   }
 }
 
-class PasswordInputField extends StatefulWidget {
-  const PasswordInputField({
+class BodyLoginWidget extends StatelessWidget {
+  const BodyLoginWidget({
     super.key,
-    required this.controller,
-    this.labelText,
-    this.hintText,
-    this.icon,
-  });
+    required TextEditingController usernameController,
+    required TextEditingController passwordController,
+    required String tag,
+  })  : _usernameController = usernameController,
+        _passwordController = passwordController,
+        _tag = tag;
 
-  final TextEditingController controller;
-  final String? labelText;
-  final String? hintText;
-  final Icon? icon;
-
-  @override
-  _PasswordInputFieldState createState() => _PasswordInputFieldState();
-}
-
-class _PasswordInputFieldState extends State<PasswordInputField> {
-  bool _passwordVisible = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _passwordVisible = false; // Initialize password visibility to hidden
-  }
+  final TextEditingController _usernameController;
+  final TextEditingController _passwordController;
+  final String _tag;
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      controller: widget.controller,
-      obscureText: !_passwordVisible, // Toggle password visibility
-      decoration: InputDecoration(
-        icon: widget.icon,
-        labelText: widget.labelText,
-        hintText: widget.hintText,
-        suffixIcon: IconButton(
-          icon: Icon(
-            _passwordVisible ? Icons.visibility : Icons.visibility_off,
-            color: Theme.of(context).primaryColorDark,
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 32.0),
+      child: Column(
+        spacing: 20,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          TextField(
+            controller: _usernameController,
+            decoration: InputDecoration(
+              icon: Icon(Icons.person),
+              labelText: 'Usuario',
+              hintText: 'Ingrese su usuario',
+            ),
           ),
-          onPressed: () {
-            setState(() {
-              _passwordVisible = !_passwordVisible;
-            });
-          },
+          PasswordInputFieldWidget(
+            controller: _passwordController,
+            icon: Icon(Icons.lock),
+            labelText: 'Contraseña',
+            hintText: 'Ingrese su contraseña',
+          ),
+          FilledButton(
+            onPressed: () {
+              Log.d(
+                  _tag,
+                  'Login button pressed username: ${_usernameController.text} '
+                  'password: ${_passwordController.text}');
+              //TODO: CG 20250215 Validate username and password
+            },
+            child: Text('Inicio de Sesión'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class FooterLoginWidget extends StatelessWidget {
+  const FooterLoginWidget({
+    super.key,
+    required String tag,
+  }) : _tag = tag;
+
+  final String _tag;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 100.0,
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 32.0),
+        child: Column(
+          children: [
+            Divider(),
+            Row(
+              spacing: 20.0,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('¿No tienes una cuenta?'),
+                TextButton(
+                  style: ButtonStyle(
+                    foregroundColor:
+                        WidgetStateProperty.all<Color>(Colors.blueAccent),
+                  ),
+                  onPressed: () {
+                    Log.d(_tag, 'Register button pressed');
+                    //TODO: CG 20250215 Navigation to register page
+                  },
+                  child: Text('Registrate acá'),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'Please enter a password';
-        }
-        if (value.length < 6) {
-          return 'Password must be at least 6 characters';
-        }
-        return null;
-      },
     );
   }
 }
