@@ -10,7 +10,6 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final GoRouter router = GoRouter(
       initialLocation: LoginPage.link,
-      //SignupPage.link,
       routes: [
         GoRoute(
           path: LoginPage.link,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:storeapp/app/login/presentation/pages/login_page.dart';
 import 'package:storeapp/app/util/log.dart';
 
 class SignupPage extends StatelessWidget {
@@ -14,15 +15,22 @@ class SignupPage extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.blue,
-          title: Center(
-            child: Text(
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-              'Registro',
+          title: Text(
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
             ),
+            'Registro',
+          ),
+          leading: IconButton(
+            icon: const Icon(
+              Icons.arrow_back,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              Navigator.pop(context); // Navigate back
+            },
           ),
         ),
         body: Center(
@@ -57,7 +65,7 @@ class SignupPage extends StatelessWidget {
               OutlinedButton(
                 onPressed: () {
                   // Navigate to the login page with goRouter
-                  context.go('/login');
+                  GoRouter.of(context).pop();
                 },
                 child: Text('Ir a login'),
               ),

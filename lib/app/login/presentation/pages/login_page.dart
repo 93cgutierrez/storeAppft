@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:storeapp/app/shared/widget/password_input_field_widget.dart';
+import 'package:storeapp/app/signup/presentation/pages/signup_page.dart';
 import 'package:storeapp/app/util/keyboard_util.dart';
 import 'package:storeapp/app/util/log.dart';
 
@@ -17,19 +19,6 @@ class LoginPage extends StatelessWidget {
     //safeArea: widget in Flutter is crucial for handling situations where parts of your app's UI might be obscured by system elements like the status bar, notches, or other intrusions.
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.blue,
-          title: Center(
-            child: Text(
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-              'Inicio de Sesión',
-            ),
-          ),
-        ),
         //add scroll to body
         body: Column(
           spacing: 20,
@@ -58,6 +47,7 @@ class HeaderLoginWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       child: Column(
+        spacing: 20,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Image.network(
@@ -65,6 +55,15 @@ class HeaderLoginWidget extends StatelessWidget {
             width: double.infinity,
             height: 150,
             fit: BoxFit.fitWidth,
+          ),
+          Text(
+            'Inicio de Sesión',
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ],
       ),
@@ -157,7 +156,7 @@ class FooterLoginWidget extends StatelessWidget {
                   ),
                   onPressed: () {
                     Log.d(_tag, 'Register button pressed');
-                    //TODO: CG 20250215 Navigation to register page
+                    GoRouter.of(context).push(SignupPage.link);
                   },
                   child: Text('Registrate acá'),
                 ),
