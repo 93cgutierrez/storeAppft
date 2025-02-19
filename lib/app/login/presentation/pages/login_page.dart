@@ -110,16 +110,19 @@ class BodyLoginWidget extends StatelessWidget {
             labelText: 'Contraseña',
             hintText: 'Ingrese su contraseña',
           ),
-          FilledButton(
-            onPressed: () {
-              KeyboardUtil.hide(context);
-              Log.d(
-                  _tag,
-                  'Login button pressed username: ${_usernameController.text} '
-                  'password: ${_passwordController.text}');
-              //TODO: CG 20250215 Validate username and password
-            },
-            child: Text('Inicio de Sesión'),
+          SizedBox(
+            width: double.infinity,
+            child: FilledButton(
+              onPressed: () {
+                KeyboardUtil.hide(context);
+                Log.d(
+                    _tag,
+                    'Login button pressed username: ${_usernameController.text} '
+                    'password: ${_passwordController.text}');
+                //TODO: CG 20250215 Validate username and password
+              },
+              child: Text('Inicio de Sesión'),
+            ),
           ),
         ],
       ),
