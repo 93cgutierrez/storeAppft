@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:storeapp/app/shared/util/validation.util.dart';
+import 'package:storeapp/app/util/validation.util.dart';
 import 'package:storeapp/app/shared/widget/password_input_field_widget.dart';
 import 'package:storeapp/app/signup/presentation/pages/signup_page.dart';
-import 'package:storeapp/app/util/keyboard_util.dart';
-import 'package:storeapp/app/util/log.dart';
+import 'package:storeapp/app/util/keyboard.util.dart';
+import 'package:storeapp/app/util/log.util.dart';
 
 class LoginPage extends StatelessWidget {
   static const String name = 'loginPage';
@@ -145,7 +145,7 @@ class _BodyLoginWidgetState extends State<BodyLoginWidget> with Validation {
               child: FilledButton(
                 onPressed: isValidForm
                     ? () {
-                        KeyboardUtil.hide(context);
+                        Keyboard.hide(context);
                         Log.d(
                             widget._tag,
                             'Login button pressed username: ${widget._usernameController.text} '

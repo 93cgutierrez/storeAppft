@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:storeapp/app/shared/util/validation.util.dart';
+import 'package:storeapp/app/util/validation.util.dart';
 
 class PasswordInputFieldWidget extends StatefulWidget {
   PasswordInputFieldWidget({

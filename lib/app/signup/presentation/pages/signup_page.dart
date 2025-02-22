@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:storeapp/app/login/presentation/pages/login_page.dart';
-import 'package:storeapp/app/shared/util/validation.util.dart';
+import 'package:storeapp/app/util/validation.util.dart';
 import 'package:storeapp/app/shared/widget/password_input_field_widget.dart';
 import 'package:storeapp/app/signup/data/model/profile_model.dart';
-import 'package:storeapp/app/util/log.dart';
+import 'package:storeapp/app/util/log.util.dart';
 
 class SignupPage extends StatefulWidget {
   static const String name = 'SignupPage';
