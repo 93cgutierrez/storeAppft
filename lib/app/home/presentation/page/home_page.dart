@@ -13,19 +13,23 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: Column(
-          spacing: 20,
-          children: [
-            Text(
-              'This is the Home Page',
-              style: TextStyle(fontSize: 24),
-            ),
-            OutlinedButton(
-                onPressed: () {
-                  GoRouter.of(context).pushReplacement(LoginPage.link);
-                },
-                child: Text('Cerrar sesión'))
-          ],
+        body: Container(
+          margin: EdgeInsets.symmetric(horizontal: 32.0),
+          child: Column(
+            spacing: 20,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Pagina de listado de Productos',
+                style: TextStyle(fontSize: 24),
+              ),
+              OutlinedButton(
+                  onPressed: () {
+                    GoRouter.of(context).pushReplacement(LoginPage.link);
+                  },
+                  child: Text('Cerrar sesión'))
+            ],
+          ),
         ),
       ),
     );

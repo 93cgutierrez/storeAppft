@@ -51,11 +51,19 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       final bool success = _loginUseCase.invoke(
         loginFormModel: state.model,
       );
-      final LoginSuccessState newState = LoginSuccessState(
-        model: state.model,
-        success: success,
-      );
-      emit(newState);
+      if (success) {
+        final LoginSuccessState newState = LoginSuccessState(
+          model: state.model,
+          success: success,
+        );
+        emit(newState);
+      } else {
+        final LoginErrorState newState = LoginErrorState(
+          model: state.model,
+          errorMessage: Exception('Login failed'),
+        );
+        emit(newState);
+      }
     } catch (e) {
       Log.e(_tag, e.toString());
       final LoginErrorState newState = LoginErrorState(
