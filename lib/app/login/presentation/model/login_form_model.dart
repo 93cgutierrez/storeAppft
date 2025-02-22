@@ -1,3 +1,5 @@
+import 'package:storeapp/app/login/domain/entity/login_entity.dart';
+
 final class LoginFormModel {
   final String email;
   final String password;
@@ -16,6 +18,12 @@ final class LoginFormModel {
       password: password ?? this.password,
     );
   }
+
+  //toEntity
+  LoginEntity toEntity() => LoginEntity(
+        email: email,
+        password: password,
+      );
 
   @override
   String toString() {
