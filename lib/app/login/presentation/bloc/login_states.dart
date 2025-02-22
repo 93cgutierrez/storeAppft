@@ -23,3 +23,21 @@ final class DataUpdatedState extends LoginState {
     required super.model,
   });
 }
+
+//loginSuccessState
+class LoginSuccessState extends LoginState {
+  final bool success;
+  LoginSuccessState({
+    required super.model,
+    required this.success,
+  });
+}
+
+//LoginErrorState
+class LoginErrorState extends LoginState {
+  final Exception errorMessage;
+  LoginErrorState({
+    required super.model,
+    required this.errorMessage,
+  });
+}

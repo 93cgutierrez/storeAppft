@@ -1,6 +1,6 @@
 import 'package:storeapp/app/login/data/repository/login_repository_impl.dart';
 import 'package:storeapp/app/login/domain/entity/login_entity.dart';
-import 'package:storeapp/app/login/domain/respository/login_repository.dart';
+import 'package:storeapp/app/login/domain/repository/login_repository.dart';
 import 'package:storeapp/app/login/presentation/model/login_form_model.dart';
 
 class LoginUseCase {

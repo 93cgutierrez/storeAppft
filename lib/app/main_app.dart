@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:storeapp/app/login/presentation/pages/login_page.dart';
 import 'package:storeapp/app/signup/presentation/pages/signup_page.dart';
+
+import 'home/presentation/page/home_page.dart';
+import 'login/presentation/page/login_page.dart';
 
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
@@ -20,6 +22,11 @@ class MainApp extends StatelessWidget {
           path: SignupPage.link,
           name: SignupPage.name,
           builder: (context, state) => SignupPage(),
+        ),
+        GoRoute(
+          path: HomePage.link,
+          name: HomePage.name,
+          builder: (context, state) => HomePage(),
         ),
         //Add more routes here ...
       ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:storeapp/app/home/presentation/page/home_page.dart';
 import 'package:storeapp/app/login/presentation/bloc/login_bloc.dart';
 import 'package:storeapp/app/login/presentation/bloc/login_events.dart';
 import 'package:storeapp/app/login/presentation/bloc/login_states.dart';
@@ -128,6 +129,15 @@ class _BodyLoginWidgetState extends State<BodyLoginWidget> with Validation {
         }*/
         final bool isValidForm = validateEmail(state.model.email) == null &&
             validatePassword(state.model.password) == null;
+        widget._usernameController.text = state.model.email;
+        widget._passwordController.text = state.model.password;
+        // Navigate to signup page
+
+        if (state is LoginSuccessState && state.success) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            GoRouter.of(context).pushReplacement(HomePage.link);
+          });
+        }
         return Expanded(
           child: Container(
             margin: EdgeInsets.symmetric(horizontal: 32.0),
@@ -139,7 +149,8 @@ class _BodyLoginWidgetState extends State<BodyLoginWidget> with Validation {
                 children: [
                   state.model.email.isEmpty && state.model.password.isEmpty
                       ? CircularProgressIndicator()
-                      : Container(),
+                      : Text(
+                          "Result: ${state is LoginSuccessState ? state.success : "N/A"}"),
                   TextFormField(
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     controller: widget._usernameController,
@@ -154,14 +165,14 @@ class _BodyLoginWidgetState extends State<BodyLoginWidget> with Validation {
                     ),
                     validator: validateEmail,
                     onChanged: (value) {
-                      setState(() {
-                        widget._usernameController.text = value.trim();
-                        bloc.add(
-                          EmailChangedEvent(
-                            email: widget._usernameController.text,
-                          ),
-                        );
-                      });
+                      //setState(() {
+                      widget._usernameController.text = value.trim();
+                      bloc.add(
+                        EmailChangedEvent(
+                          email: widget._usernameController.text,
+                        ),
+                      );
+                      //});
                     },
                   ),
                   PasswordInputFieldWidget(
@@ -171,14 +182,14 @@ class _BodyLoginWidgetState extends State<BodyLoginWidget> with Validation {
                     labelText: 'Contraseña',
                     hintText: 'Ingrese su contraseña',
                     onChanged: (value) {
-                      setState(() {
-                        widget._passwordController.text = value.trim();
-                        bloc.add(
-                          PasswordChangedEvent(
-                            password: widget._passwordController.text,
-                          ),
-                        );
-                      });
+                      //setState(() {
+                      widget._passwordController.text = value.trim();
+                      bloc.add(
+                        PasswordChangedEvent(
+                          password: widget._passwordController.text,
+                        ),
+                      );
+                      //});
                     },
                   ),
                   SizedBox(
@@ -191,7 +202,7 @@ class _BodyLoginWidgetState extends State<BodyLoginWidget> with Validation {
                                   widget._tag,
                                   'Login button pressed username: ${widget._usernameController.text} '
                                   'password: ${widget._passwordController.text}');
-                              //TODO: CG 20250215 Validate username and password
+                              bloc.add(SubmitEvent());
                             }
                           : null,
                       child: Text('Inicio de Sesión'),

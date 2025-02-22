@@ -1,11 +1,13 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:storeapp/app/login/domain/use_case/login_use_case.dart';
 import 'package:storeapp/app/login/presentation/model/login_form_model.dart';
+import 'package:storeapp/app/util/log.util.dart';
 
 import 'login_events.dart';
 import 'login_states.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
+  final String _tag = 'LoginBloc';
   late final LoginUseCase _loginUseCase;
   LoginBloc() : super(InitialState()) {
     on<EmailChangedEvent>(_emailChangedEvent);
@@ -45,9 +47,22 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     SubmitEvent event,
     Emitter<LoginState> emit,
   ) {
-    final bool success = _loginUseCase.invoke(
-      loginFormModel: state.model,
-    );
-    emit(InitialState());
+    try {
+      final bool success = _loginUseCase.invoke(
+        loginFormModel: state.model,
+      );
+      final LoginSuccessState newState = LoginSuccessState(
+        model: state.model,
+        success: success,
+      );
+      emit(newState);
+    } catch (e) {
+      Log.e(_tag, e.toString());
+      final LoginErrorState newState = LoginErrorState(
+        model: state.model,
+        errorMessage: e as Exception,
+      );
+      emit(newState);
+    }
   }
 }
