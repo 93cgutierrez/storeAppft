@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:storeapp/app/login/presentation/pages/login_page.dart';
+import 'package:storeapp/app/shared/util/validation.util.dart';
 import 'package:storeapp/app/shared/widget/password_input_field_widget.dart';
 import 'package:storeapp/app/signup/data/model/profile_model.dart';
 import 'package:storeapp/app/util/log.dart';
@@ -16,6 +17,8 @@ class SignupPage extends StatefulWidget {
 }
 
 class _SignupPageState extends State<SignupPage> {
+  //key
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   //controller
   final TextEditingController _nameController = TextEditingController();
 
@@ -38,6 +41,19 @@ class _SignupPageState extends State<SignupPage> {
     _loadInitialData();
   }
 
+  //dispose
+  @override
+  void dispose() {
+    super.dispose();
+    Log.d(SignupPage._tag, 'dispose');
+    //dispose controllers
+    _nameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    _imageProfileUrlController.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     //TODO: 20250213 homework
@@ -50,6 +66,7 @@ class _SignupPageState extends State<SignupPage> {
     //sign up button
     return SafeArea(
       child: Scaffold(
+        resizeToAvoidBottomInset: true,
         appBar: AppBar(
           backgroundColor: Colors.blue,
           title: Text(
@@ -77,6 +94,7 @@ class _SignupPageState extends State<SignupPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 BodySignupWidget(
+                  formKey: _formKey,
                   nameController: _nameController,
                   emailController: _emailController,
                   passwordController: _passwordController,
@@ -105,17 +123,20 @@ class _SignupPageState extends State<SignupPage> {
 class BodySignupWidget extends StatefulWidget {
   const BodySignupWidget({
     super.key,
+    required GlobalKey<FormState> formKey,
     required TextEditingController nameController,
     required TextEditingController emailController,
     required TextEditingController passwordController,
     required TextEditingController confirmPasswordController,
     required TextEditingController imageProfileUrlController,
-  })  : _nameController = nameController,
+  })  : _formKey = formKey,
+        _nameController = nameController,
         _emailController = emailController,
         _passwordController = passwordController,
         _confirmPasswordController = confirmPasswordController,
         _imageProfileUrlController = imageProfileUrlController;
 
+  final GlobalKey<FormState> _formKey;
   final TextEditingController _nameController;
   final TextEditingController _emailController;
   final TextEditingController _passwordController;
@@ -126,111 +147,119 @@ class BodySignupWidget extends StatefulWidget {
   State<BodySignupWidget> createState() => _BodySignupWidgetState();
 }
 
-class _BodySignupWidgetState extends State<BodySignupWidget> {
+class _BodySignupWidgetState extends State<BodySignupWidget> with Validation {
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 32.0),
-      child: Column(
-        spacing: 20,
-        children: [
-          //Load image from URL
-          Image.network(
-            widget._imageProfileUrlController.text,
-            width: 100,
-            height: 100,
-            fit: BoxFit.cover,
-            errorBuilder: (context, error, stackTrace) {
-              Log.e(SignupPage._tag, 'Error loading image: $error');
-              return Icon(Icons.error, size: 100, color: Colors.red);
-            },
-          ),
-          //name
-          TextField(
-            controller: widget._nameController,
-            decoration: InputDecoration(
-              icon: Icon(Icons.person),
-              labelText: 'Nombre',
-              hintText: 'Ingrese su nombre',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-          ),
-          //email
-          TextField(
-            controller: widget._emailController,
-            decoration: InputDecoration(
-              icon: Icon(Icons.email),
-              labelText: 'Email',
-              hintText: 'Ingrese su email',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-          ),
-          //password
-          PasswordInputFieldWidget(
-            controller: widget._passwordController,
-            icon: Icon(Icons.lock),
-            labelText: 'Contraseña',
-            hintText: 'Ingrese su contraseña',
-          ),
-          //confirm password
-          PasswordInputFieldWidget(
-            controller: widget._confirmPasswordController,
-            icon: Icon(Icons.lock),
-            labelText: 'Confirmar Contraseña',
-            hintText: 'Confirme su contraseña',
-          ),
-          //imageProfileUrl
-          TextField(
-            maxLines: 2,
-            //not allowed enter new line
-            keyboardType: TextInputType.text,
-            controller: widget._imageProfileUrlController,
-            decoration: InputDecoration(
-              icon: Icon(Icons.image),
-              labelText: 'URL de la imagen de perfil',
-              hintText: 'Ingrese la URL de la imagen de perfil',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-            onChanged: (String value) {
-              setState(() {
-                widget._imageProfileUrlController.text = value;
-              });
-            },
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          SizedBox(
-            width: double.infinity,
-            child: FilledButton(
-              onPressed: () {
-                // Handle sign up logic here
-                Log.d(SignupPage._tag, 'Sign up button pressed');
-                _validateAndSaveProfile(
-                  name: widget._nameController.text,
-                  email: widget._emailController.text,
-                  password: widget._passwordController.text,
-                  confirmPassword: widget._confirmPasswordController.text,
-                  imageProfileUrl: widget._imageProfileUrlController.text,
-                );
+      child: Form(
+        key: widget._formKey,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        child: Column(
+          spacing: 20,
+          children: [
+            //Load image from URL
+            Image.network(
+              widget._imageProfileUrlController.text,
+              width: 100,
+              height: 100,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                Log.e(SignupPage._tag, 'Error loading image: $error');
+                return Icon(Icons.error, size: 100, color: Colors.red);
               },
-              child: Text('Registrarse'),
             ),
-          ),
-/*          OutlinedButton(
-            onPressed: () {
-              // Navigate to the login page with goRouter
-              GoRouter.of(context).pop();
-            },
-            child: Text('Ir a login'),
-          ),*/
-        ],
+            //name
+            TextFormField(
+              controller: widget._nameController,
+              decoration: InputDecoration(
+                icon: Icon(Icons.person),
+                labelText: 'Nombre',
+                hintText: 'Ingrese su nombre',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+            ),
+            //email
+            TextFormField(
+              controller: widget._emailController,
+              decoration: InputDecoration(
+                icon: Icon(Icons.email),
+                labelText: 'Email',
+                hintText: 'Ingrese su email',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              validator: validateEmail,
+            ),
+            //password
+            PasswordInputFieldWidget(
+              controller: widget._passwordController,
+              icon: Icon(Icons.lock),
+              labelText: 'Contraseña',
+              hintText: 'Ingrese su contraseña',
+            ),
+            //confirm password
+            PasswordInputFieldWidget(
+              controller: widget._confirmPasswordController,
+              icon: Icon(Icons.lock),
+              labelText: 'Confirmar Contraseña',
+              hintText: 'Confirme su contraseña',
+            ),
+            //imageProfileUrl
+            TextFormField(
+              maxLines: 2,
+              //not allowed enter new line
+              keyboardType: TextInputType.text,
+              controller: widget._imageProfileUrlController,
+              decoration: InputDecoration(
+                icon: Icon(Icons.image),
+                labelText: 'URL de la imagen de perfil',
+                hintText: 'Ingrese la URL de la imagen de perfil',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              onChanged: (String value) {
+                setState(() {
+                  widget._imageProfileUrlController.text = value;
+                });
+              },
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            SizedBox(
+              width: double.infinity,
+              child: FilledButton(
+                onPressed: () {
+                  if (widget._formKey.currentState!.validate()) {
+                    // El formulario es válido, procesar los datos
+                  }
+                  // Handle sign up logic here
+                  Log.d(SignupPage._tag, 'Sign up button pressed');
+                  _validateAndSaveProfile(
+                    name: widget._nameController.text,
+                    email: widget._emailController.text,
+                    password: widget._passwordController.text,
+                    confirmPassword: widget._confirmPasswordController.text,
+                    imageProfileUrl: widget._imageProfileUrlController.text,
+                  );
+                },
+                child: Text('Registrarse'),
+              ),
+            ),
+            /*          OutlinedButton(
+              onPressed: () {
+                // Navigate to the login page with goRouter
+                GoRouter.of(context).pop();
+              },
+              child: Text('Ir a login'),
+            ),*/
+          ],
+        ),
       ),
     );
   }
