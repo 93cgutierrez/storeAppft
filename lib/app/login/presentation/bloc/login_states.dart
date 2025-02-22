@@ -9,9 +9,8 @@ sealed class LoginState {
 }
 
 final class InitialState extends LoginState {
-  InitialState({
-    required LoginFormModel model,
-  }) : super(
+  InitialState()
+      : super(
           model: LoginFormModel(
             email: '',
             password: '',
