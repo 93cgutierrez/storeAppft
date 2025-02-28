@@ -8,13 +8,12 @@ import 'login_states.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final String _tag = 'LoginBloc';
-  late final LoginUseCase _loginUseCase;
-  LoginBloc() : super(InitialState()) {
+  final LoginUseCase loginUseCase;
+
+  LoginBloc({required this.loginUseCase}) : super(InitialState()) {
     on<EmailChangedEvent>(_emailChangedEvent);
     on<PasswordChangedEvent>(_passwordChangedEvent);
     on<SubmitEvent>(_submitEvent);
-
-    _loginUseCase = LoginUseCase();
   }
 
   void _emailChangedEvent(
@@ -48,7 +47,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     Emitter<LoginState> emit,
   ) {
     try {
-      final bool success = _loginUseCase.invoke(
+      final bool success = loginUseCase.invoke(
         loginFormModel: state.model,
       );
       if (success) {

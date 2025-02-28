@@ -13,6 +13,10 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          title: Text('Productos'),
+          centerTitle: true,
+        ),
         body: Container(
           margin: EdgeInsets.symmetric(horizontal: 32.0),
           child: Column(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:storeapp/app/di/dependency_injection.dart';
 import 'package:storeapp/app/home/presentation/page/home_page.dart';
 import 'package:storeapp/app/login/presentation/bloc/login_bloc.dart';
 import 'package:storeapp/app/login/presentation/bloc/login_events.dart';
@@ -25,7 +26,7 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
-      value: LoginBloc(),
+      value: DependencyInjection.serviceLocator<LoginBloc>(),
       child: SafeArea(
         child: Scaffold(
           resizeToAvoidBottomInset: false,
