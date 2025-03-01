@@ -48,3 +48,12 @@ app.*.map.json
 
 # FVM Version Cache
 .fvm/!/pubspec.lock
+/lib/firebase_options.dart
+/macos/Podfile.lock
+/.fvm/versions/3.27.1/
+/.fvm/flutter_sdk/
+/.fvm/fvm_config.json
+/.fvm/release
+/.fvm/version
+/.fvmrc
+/.metadata
