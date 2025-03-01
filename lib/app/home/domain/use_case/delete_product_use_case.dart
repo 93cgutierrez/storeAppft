@@ -7,8 +7,7 @@ class DeleteProductUseCase {
 
   Future<bool> invoke({required String productId}) async {
     try {
-      await homeRepository.deleteProduct(productId: productId);
-      return true;
+      return await homeRepository.deleteProduct(productId: productId);
     } catch (e) {
       return false;
     }

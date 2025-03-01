@@ -68,7 +68,7 @@ class FabWidget extends StatelessWidget {
       onPressed: () {
         //getProducts
         final HomeBloc bloc = context.read<HomeBloc>();
-        bloc.add(GetProductsEvent());
+        //bloc.add(GetProductsEvent());
       },
     );
   }

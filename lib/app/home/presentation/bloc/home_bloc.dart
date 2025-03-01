@@ -61,7 +61,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         productId: event.productId,
       );
       if (success) {
-        _getProductsEvent(GetProductsEvent(), emit);
+        await _getProductsEvent(GetProductsEvent(), emit);
       } else {
         Log.d(_tag, 'Error eliminando el producto');
         throw Exception();
