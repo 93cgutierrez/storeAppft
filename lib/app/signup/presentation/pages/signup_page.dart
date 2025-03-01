@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:storeapp/app/util/validation.util.dart';
 import 'package:storeapp/app/shared/widget/password_input_field_widget.dart';
 import 'package:storeapp/app/signup/data/model/profile_model.dart';
 import 'package:storeapp/app/util/log.util.dart';
+import 'package:storeapp/app/util/validation.util.dart';
 
 class SignupPage extends StatefulWidget {
   static const String name = 'SignupPage';
@@ -75,6 +75,7 @@ class _SignupPageState extends State<SignupPage> {
             ),
             'Registro',
           ),
+          centerTitle: true,
           leading: IconButton(
             icon: const Icon(
               Icons.arrow_back,
