@@ -74,20 +74,10 @@ class FabWidget extends StatelessWidget {
   }
 }
 
-class ProductListWidget extends StatefulWidget {
+class ProductListWidget extends StatelessWidget {
   const ProductListWidget({
     super.key,
   });
-
-  @override
-  State<ProductListWidget> createState() => _ProductListWidgetState();
-}
-
-class _ProductListWidgetState extends State<ProductListWidget> {
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
