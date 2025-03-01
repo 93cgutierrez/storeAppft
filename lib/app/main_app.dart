@@ -34,8 +34,13 @@ class MainApp extends StatelessWidget {
           name: FormProductPage.name,
           builder: (context, state) => FormProductPage(),
         ),
-        //TODO: EDIT PAGE
-        //Add more routes here ...
+        //..
+        GoRoute(
+          path: '${FormProductPage.link}/:id',
+          name: FormProductPage.name,
+          builder: (context, state) =>
+              FormProductPage(id: state.pathParameters['id']),
+        ),
       ],
     );
     return MaterialApp.router(

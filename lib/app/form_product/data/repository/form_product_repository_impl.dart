@@ -26,4 +26,13 @@ class FormProductRepositoryImpl implements FormProductRepository {
       throw (Exception());
     }
   }
+
+  @override
+  Future<bool> updateProduct(ProductEntity productEntity) {
+    try {
+      return productService.update(productEntity.toProductDataModel());
+    } catch (e) {
+      throw (Exception());
+    }
+  }
 }

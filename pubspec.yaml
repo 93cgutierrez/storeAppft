@@ -44,6 +44,8 @@ dependencies:
   get_it: ^8.0.3
   #http networking
   dio: ^5.8.0+1
+  #shared preferences
+  shared_preferences: ^2.5.2
 
   #More dependencies here !
 

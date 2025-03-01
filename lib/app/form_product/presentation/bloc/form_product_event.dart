@@ -16,7 +16,6 @@ final class UrlImageChangedEvent extends FormProductEvent {
 }
 
 final class SubmitEvent extends FormProductEvent {
-  
   SubmitEvent();
 }
 
@@ -24,5 +23,3 @@ final class GetProductEvent extends FormProductEvent {
   final String id;
   GetProductEvent(this.id);
 }
-
-

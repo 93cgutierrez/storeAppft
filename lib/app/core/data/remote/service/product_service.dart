@@ -86,4 +86,24 @@ final class ProductService {
       throw Exception('Error al obtener el producto $e');
     }
   }
+
+  //updateProduct
+  Future<bool> update(ProductDataModel product) async {
+    try {
+      final Response response = await apiClient.patch(
+        '$baseUrl/products/${product.id}.json',
+        data: product.toJson(),
+      );
+      if (response.statusCode == 200) {
+        Log.i(_tag, 'Producto actualizado exitosamente');
+        return true;
+      } else {
+        Log.e(_tag, 'Error al actualizar el producto');
+        throw Exception();
+      }
+    } catch (e) {
+      Log.e(_tag, e.toString());
+      throw Exception('Error al actualizar el producto $e');
+    }
+  }
 }
