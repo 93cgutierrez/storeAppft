@@ -20,7 +20,6 @@ class FormProductBloc extends Bloc<FormProductEvent, FormProductState> {
     on<UrlImageChangedEvent>(_urlImageChangedEvent);
     on<SubmitEvent>(_submitEvent);
     on<GetProductEvent>(_getProductEvent);
-    //on<UpdateProductEvent>(_updateProductEvent);
   }
 
   void _nameChangedEvent(
@@ -57,8 +56,12 @@ class FormProductBloc extends Bloc<FormProductEvent, FormProductState> {
   void _submitEvent(SubmitEvent event, Emitter<FormProductState> emit) async {
     late final FormProductState newState;
     try {
-      final bool result = await addProductUseCase.invoke(state.model);
-
+      final bool result;
+      if (state.model.id.isEmpty) {
+        result = await addProductUseCase.invoke(state.model);
+      } else {
+        result = await updateProductUseCase.invoke(state.model);
+      }
       if (result) {
         newState = SubmitSuccessState(model: state.model);
       } else {

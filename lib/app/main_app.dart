@@ -54,10 +54,10 @@ class MainApp extends StatelessWidget {
         ),
         //..
         GoRoute(
-          path: '${FormProductPage.link}/:id',
-          name: '${FormProductPage.name}upadate',
+          path: FormProductPage.linkUpdate,
+          name: FormProductPage.nameUpdate,
           builder: (context, state) =>
-              FormProductPage(id: state.pathParameters['id']),
+              FormProductPage(id: state.pathParameters[FormProductPage.idKey]),
         ),
       ],
     );

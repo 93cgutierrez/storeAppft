@@ -10,7 +10,7 @@ class GetProductsUseCase {
   Future<List<ProductModel>> invoke() async {
     final List<ProductModel> products = [];
     try {
-      final result = await homeRepository.getProducts();
+      final List<ProductEntity> result = await homeRepository.getProducts();
 
       for (ProductEntity element in result) {
         products.add(element.toProductModel());

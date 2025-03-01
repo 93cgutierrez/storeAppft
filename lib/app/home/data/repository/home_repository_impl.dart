@@ -3,7 +3,6 @@ import 'package:storeapp/app/core/domain/entity/product_entity.dart';
 import 'package:storeapp/app/home/domain/repository/home_repository.dart';
 
 class HomeRepositoryImpl implements HomeRepository {
-
   final ProductService productService;
 
   HomeRepositoryImpl({required this.productService});
@@ -12,10 +11,9 @@ class HomeRepositoryImpl implements HomeRepository {
   Future<bool> deleteProduct(String id) {
     // TODO: implement deleteProduct
     try {
-      
-    return productService.delete(id);
+      return productService.delete(id);
     } catch (e) {
-      throw(Exception(e));
+      throw (Exception(e));
     }
   }
 
@@ -24,16 +22,14 @@ class HomeRepositoryImpl implements HomeRepository {
     // TODO: implement getProducts
     final List<ProductEntity> products = [];
 
-try {
-  
-    final response = await productService.getAll();
-    for (var element in response) {
-      products.add(element.toEntity());
+    try {
+      final response = await productService.getAll();
+      for (var element in response) {
+        products.add(element.toEntity());
+      }
+    } catch (e) {
+      throw (Exception(e));
     }
-
-} catch (e) {
-  throw(Exception(e));
-}
 
     return products;
   }

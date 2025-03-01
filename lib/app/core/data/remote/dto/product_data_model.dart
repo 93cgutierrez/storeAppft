@@ -38,7 +38,7 @@ class ProductDataModel {
       'id': id,
       'name': name,
       'image': imageUrl,
-      'price': price.toStringAsFixed(2),
+      'price': price.toInt(),
     };
   }
 }

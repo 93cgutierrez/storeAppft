@@ -7,15 +7,25 @@ import 'package:storeapp/app/di/dependency_injection.dart';
 import 'package:storeapp/app/form_product/presentation/bloc/form_product_bloc.dart';
 import 'package:storeapp/app/form_product/presentation/bloc/form_product_event.dart';
 import 'package:storeapp/app/form_product/presentation/bloc/form_product_state.dart';
+import 'package:storeapp/app/util/log.util.dart';
 
 import 'login_mixin.dart';
 
+const String _tag = 'FormProductPage';
+
 class FormProductPage extends StatelessWidget {
+  //add
   static const String name = 'formProductPage';
   static const String _tag = name;
   static const String link = '/$name';
 
+  //update
+  static const String nameUpdate = 'formProductPage-update';
+  static const String idKey = 'id';
+  static const String linkUpdate = '/$nameUpdate/:$idKey';
+
   final String? id;
+
   const FormProductPage({super.key, this.id});
 
   @override
@@ -25,7 +35,25 @@ class FormProductPage extends StatelessWidget {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          title: Text(id == null ? "Agregar Producto" : "Actualizar Producto"),
+          backgroundColor: Colors.blue,
+          title: Text(
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+            id == null ? "Agregar Producto" : "Actualizar Producto",
+          ),
+          centerTitle: true,
+          leading: IconButton(
+            icon: const Icon(
+              Icons.arrow_back,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              Navigator.pop(context); // Navigate back
+            },
+          ),
         ),
         body: Column(
           children: [
@@ -39,6 +67,7 @@ class FormProductPage extends StatelessWidget {
 
 class BodyLoginWidget extends StatefulWidget {
   const BodyLoginWidget(this.id, {super.key});
+
   final String? id;
 
   @override
@@ -97,7 +126,17 @@ class _BodyLoginWidgetState extends State<BodyLoginWidget> with LoginMixin {
                 key: keyForm,
                 child: Column(
                   children: [
-                    Text(state.model.name),
+                    //Load image from URL
+                    Image.network(
+                      urlField.text,
+                      width: 100,
+                      height: 100,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        Log.e(_tag, 'Error loading image: $error');
+                        return Icon(Icons.error, size: 100, color: Colors.red);
+                      },
+                    ),
                     TextFormField(
                       controller: nameField,
                       onChanged: (value) =>
@@ -133,6 +172,8 @@ class _BodyLoginWidgetState extends State<BodyLoginWidget> with LoginMixin {
                         icon: Icon(Icons.attach_money),
                         hintText: "Escribe el precio del producto",
                       ),
+                      keyboardType:
+                          TextInputType.numberWithOptions(decimal: true),
                     ),
                     SizedBox(height: 48.0),
                     FilledButton(

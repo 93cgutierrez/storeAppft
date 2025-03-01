@@ -111,7 +111,10 @@ class FabWidget extends StatelessWidget {
         GoRouter.of(context).push(FormProductPage.link);
       },
       backgroundColor: Colors.green,
-      child: Icon(Icons.add),
+      child: Icon(
+        Icons.add,
+        size: 40,
+      ),
     );
   }
 }
@@ -205,12 +208,20 @@ class ProductItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final bloc = context.read<HomeBloc>();
     return InkWell(
+      onTap: () {
+        GoRouter.of(context).pushNamed(
+          FormProductPage.nameUpdate,
+          pathParameters: {
+            FormProductPage.idKey: product.id,
+          },
+        );
+      },
       onLongPress: () {
         //showDialog
         _buildShowDialog(context, bloc);
       },
       child: Card(
-        color: Colors.blue,
+        color: Colors.white54,
         child: SizedBox(
           height: 150.0,
           child: Row(
@@ -239,11 +250,19 @@ class ProductItemWidget extends StatelessWidget {
                     children: [
                       Text(
                         product.name,
-                        style: TextStyle(fontSize: 18),
+                        style: TextStyle(
+                          color: Colors.blue,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       Text(
                         '\$ ${product.price}',
-                        style: TextStyle(fontSize: 14),
+                        style: TextStyle(
+                          color: Colors.blue,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ],
                   ),
@@ -251,6 +270,7 @@ class ProductItemWidget extends StatelessWidget {
               ),
               SizedBox(width: 8),
               Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   IconButton(
                     onPressed: () {
@@ -264,14 +284,16 @@ class ProductItemWidget extends StatelessWidget {
                   ),
                   IconButton(
                     onPressed: () {
-                      GoRouter.of(context).push(
-                        FormProductPage.link,
-                        extra: product.id,
+                      GoRouter.of(context).pushNamed(
+                        FormProductPage.nameUpdate,
+                        pathParameters: {
+                          FormProductPage.idKey: product.id,
+                        },
                       );
                     },
                     icon: Icon(
                       Icons.edit,
-                      color: Colors.yellow,
+                      color: Colors.blue,
                     ),
                   ),
                 ],

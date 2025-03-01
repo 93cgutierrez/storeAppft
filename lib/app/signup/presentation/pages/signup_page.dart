@@ -4,9 +4,10 @@ import 'package:storeapp/app/signup/data/model/profile_model.dart';
 import 'package:storeapp/app/util/log.util.dart';
 import 'package:storeapp/app/util/validation.util.dart';
 
+const String _tag = 'SignupPage';
+
 class SignupPage extends StatefulWidget {
   static const String name = 'SignupPage';
-  static const String _tag = name;
   static const String link = '/$name';
   SignupPage({super.key});
 
@@ -34,7 +35,7 @@ class _SignupPageState extends State<SignupPage> {
   @override
   void initState() {
     super.initState();
-    Log.d(SignupPage._tag, 'initState');
+    Log.d(_tag, 'initState');
     //load initial data
     _loadInitialData();
   }
@@ -43,7 +44,7 @@ class _SignupPageState extends State<SignupPage> {
   @override
   void dispose() {
     super.dispose();
-    Log.d(SignupPage._tag, 'dispose');
+    Log.d(_tag, 'dispose');
     //dispose controllers
     _nameController.dispose();
     _emailController.dispose();
@@ -109,7 +110,7 @@ class _SignupPageState extends State<SignupPage> {
   }
 
   void _loadInitialData() {
-    Log.d(SignupPage._tag, '_loadInitialData');
+    Log.d(_tag, '_loadInitialData');
     //load initial data
     //_nameController.text = 'John Doe';
     //_emailController.text = 'john.doe@example.com';
@@ -164,7 +165,7 @@ class _BodySignupWidgetState extends State<BodySignupWidget> with Validation {
               height: 100,
               fit: BoxFit.cover,
               errorBuilder: (context, error, stackTrace) {
-                Log.e(SignupPage._tag, 'Error loading image: $error');
+                Log.e(_tag, 'Error loading image: $error');
                 return Icon(Icons.error, size: 100, color: Colors.red);
               },
             ),
@@ -238,7 +239,7 @@ class _BodySignupWidgetState extends State<BodySignupWidget> with Validation {
                     // El formulario es válido, procesar los datos
                   }
                   // Handle sign up logic here
-                  Log.d(SignupPage._tag, 'Sign up button pressed');
+                  Log.d(_tag, 'Sign up button pressed');
                   _validateAndSaveProfile(
                     name: widget._nameController.text,
                     email: widget._emailController.text,
@@ -281,7 +282,7 @@ class _BodySignupWidgetState extends State<BodySignupWidget> with Validation {
           content: Text('Todos los campos son obligatorios'),
         ),
       );
-      Log.d(SignupPage._tag, 'All fields are required');
+      Log.d(_tag, 'All fields are required');
       return false;
     }
     if (widget._passwordController.text !=
@@ -292,7 +293,7 @@ class _BodySignupWidgetState extends State<BodySignupWidget> with Validation {
           content: Text('Las contraseñas no coinciden'),
         ),
       );
-      Log.d(SignupPage._tag, 'Passwords do not match');
+      Log.d(_tag, 'Passwords do not match');
       return false;
     }
 
@@ -302,7 +303,7 @@ class _BodySignupWidgetState extends State<BodySignupWidget> with Validation {
       password: widget._passwordController.text,
       imageProfileUrl: widget._imageProfileUrlController.text,
     );
-    Log.d(SignupPage._tag, 'Profile: $profile');
+    Log.d(_tag, 'Profile: $profile');
     //TODO: 20250218 PENDING SAVE PROFILE
     return true;
   }
