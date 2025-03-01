@@ -45,6 +45,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         model: state.model,
         errorMessage: 'Error obteniendo los productos: ${e.toString()}',
       );
+      emit(newState);
     }
   }
 
@@ -71,6 +72,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         model: state.model,
         errorMessage: 'Error eliminando el producto: ${e.toString()}',
       );
+      emit(newState);
     }
   }
 }

@@ -22,4 +22,13 @@ class ProductModel {
       price: model.price,
     );
   }
+
+  static ProductModel toModel(ProductEntity entity) {
+    return ProductModel(
+      id: entity.id,
+      name: entity.name,
+      urlImage: entity.image,
+      price: entity.price,
+    );
+  }
 }

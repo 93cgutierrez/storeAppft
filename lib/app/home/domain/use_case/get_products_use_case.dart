@@ -9,6 +9,8 @@ class GetProductsUseCase {
 
   Future<List<ProductModel>> invoke() async {
     final List<ProductEntity> entities = await homeRepository.getProducts();
-    return [];
+    final List<ProductModel> models =
+        entities.map((entity) => ProductModel.toModel(entity)).toList();
+    return models;
   }
 }
