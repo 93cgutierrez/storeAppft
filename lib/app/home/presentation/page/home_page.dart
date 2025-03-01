@@ -22,7 +22,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: BlocProvider.value(
-        value: DependencyInjection.serviceLocator<HomeBloc>(),
+        value: DependencyInjection.serviceLocator.get<HomeBloc>(),
         child: Scaffold(
             appBar: AppBar(
               backgroundColor: Colors.blue,
@@ -87,14 +87,13 @@ class _ProductListWidgetState extends State<ProductListWidget> {
   @override
   void initState() {
     super.initState();
-    //getProducts
-    final HomeBloc bloc = context.read<HomeBloc>();
-    bloc.add(GetProductsEvent());
   }
 
   @override
   Widget build(BuildContext context) {
     final HomeBloc bloc = context.read<HomeBloc>();
+    //getProducts
+    bloc.add(GetProductsEvent());
     return BlocConsumer<HomeBloc, HomeState>(
       listener: (context, state) {
         switch (state) {
@@ -145,7 +144,6 @@ class _ProductListWidgetState extends State<ProductListWidget> {
             return ListView.builder(
               itemCount: state.model.products.length,
               itemBuilder: (context, index) => ProductItemWidget(
-                bloc: bloc,
                 index: index,
                 product: state.model.products[index],
               ),
@@ -161,17 +159,16 @@ class _ProductListWidgetState extends State<ProductListWidget> {
 class ProductItemWidget extends StatelessWidget {
   final int index;
   final ProductModel product;
-  final HomeBloc bloc;
 
   const ProductItemWidget({
     super.key,
     required this.index,
     required this.product,
-    required this.bloc,
   });
 
   @override
   Widget build(BuildContext context) {
+    final bloc = context.read<HomeBloc>();
     return InkWell(
       onLongPress: () {
         //showDialog
