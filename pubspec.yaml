@@ -40,7 +40,12 @@ dependencies:
   go_router: ^14.8.0
   #state management
   flutter_bloc: ^9.0.0
+  #dependency injection
   get_it: ^8.0.3
+  #http networking
+  dio: ^5.8.0+1
+
+  #More dependencies here !
 
 
 dev_dependencies:

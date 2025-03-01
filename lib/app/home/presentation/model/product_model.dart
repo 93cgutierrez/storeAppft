@@ -13,17 +13,8 @@ class ProductModel {
     required this.price,
   });
 
-  //toEntity
-  ProductEntity toEntity(ProductModel model) {
-    return ProductEntity(
-      id: model.id,
-      name: model.name,
-      image: model.urlImage,
-      price: model.price,
-    );
-  }
-
-  static ProductModel toModel(ProductEntity entity) {
+  //toModel
+  factory ProductModel.toModel(ProductEntity entity) {
     return ProductModel(
       id: entity.id,
       name: entity.name,

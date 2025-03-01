@@ -1,75 +1,46 @@
+import 'package:storeapp/app/core/data/remote/dto/product_data_model.dart';
+import 'package:storeapp/app/core/data/remote/service/product_service.dart';
 import 'package:storeapp/app/core/domain/entity/product_entity.dart';
 import 'package:storeapp/app/home/domain/repository/home_repository.dart';
+import 'package:storeapp/app/util/log.util.dart';
 
 class HomeRepositoryImpl implements HomeRepository {
+  static const String _tag = 'HomeRepositoryImpl';
+  final ProductService productService;
+
+  HomeRepositoryImpl({required this.productService});
+
   @override
-  bool deleteProduct({required String productId}) {
-    return false;
+  Future<bool> deleteProduct({required String productId}) async {
+    try {
+      await productService.deleteProduct(productId);
+      return true;
+    } catch (e) {
+      Log.e(_tag, e.toString());
+      throw Exception('Error al eliminar el producto $e');
+    }
   }
 
   @override
-  List<ProductEntity> getProducts() {
-    return [
-      ProductEntity(
-        id: '1',
-        name: 'Producto 1',
-        image: 'https://picsum.photos/600/700?random=1',
-        price: 10.0,
-      ),
-      ProductEntity(
-        id: '2',
-        name: 'Producto 2',
-        image: 'https://picsum.photos/600/700?random=2',
-        price: 20.0,
-      ),
-      ProductEntity(
-        id: '3',
-        name: 'Producto 3',
-        image: 'https://picsum.photos/600/700?random=3',
-        price: 30.0,
-      ),
-      ProductEntity(
-        id: '4',
-        name: 'Producto 4',
-        image: 'https://picsum.photos/600/700?random=4',
-        price: 40.0,
-      ),
-      ProductEntity(
-        id: '5',
-        name: 'Producto 5',
-        image: 'https://picsum.photos/600/700?random=5',
-        price: 50.0,
-      ),
-      ProductEntity(
-        id: '6',
-        name: 'Producto 6',
-        image: 'https://picsum.photos/600/700?random=6',
-        price: 60.0,
-      ),
-      ProductEntity(
-        id: '7',
-        name: 'Producto 7',
-        image: 'https://picsum.photos/600/700?random=7',
-        price: 70.0,
-      ),
-      ProductEntity(
-        id: '8',
-        name: 'Producto 8',
-        image: 'https://picsum.photos/600/700?random=8',
-        price: 80.0,
-      ),
-      ProductEntity(
-        id: '9',
-        name: 'Producto 9',
-        image: 'https://picsum.photos/600/700?random=9',
-        price: 90.0,
-      ),
-      ProductEntity(
-        id: '10',
-        name: 'Producto 10',
-        image: 'https://picsum.photos/600/700?random=10',
-        price: 100.0,
-      ),
-    ];
+  Future<List<ProductEntity>> getProducts() async {
+    final List<ProductEntity> products = [];
+    try {
+      final List<ProductDataModel> response =
+          await productService.getAllProducts();
+      for (var product in response) {
+        products.add(
+          ProductEntity(
+            id: product.id,
+            name: product.name,
+            image: product.imageUrl,
+            price: product.price,
+          ),
+        );
+      }
+      return products;
+    } catch (e) {
+      Log.e(_tag, e.toString());
+      throw Exception('Error al obtener los productos $e');
+    }
   }
 }

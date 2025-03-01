@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -162,33 +163,7 @@ class ProductItemWidget extends StatelessWidget {
     return InkWell(
       onLongPress: () {
         //showDialog
-        showDialog(
-          context: context,
-          builder: (BuildContext context) => AlertDialog(
-            title: const Text(
-              'Eliminar producto',
-            ),
-            content: Text(
-              '¿Desea eliminar el producto ${product.name}?',
-            ),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text('Cancelar'),
-              ),
-              TextButton(
-                onPressed: () {
-                  //TODO: VALIDATE WITH ORIGINAL CODE
-                  bloc.add(DeleteProductEvent(productId: product.id));
-                  Navigator.of(context).pop();
-                },
-                child: const Text('Eliminar'),
-              )
-            ],
-          ),
-        );
+        _buildShowDialog(context, bloc);
       },
       child: Card(
         color: Colors.blue,
@@ -220,9 +195,66 @@ class ProductItemWidget extends StatelessWidget {
                   ),
                 ),
               ),
+              SizedBox(width: 8),
+              Column(
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      //showDialog
+                      _buildShowDialog(context, bloc);
+                    },
+                    icon: Icon(
+                      Icons.delete,
+                      color: Colors.red,
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      if (kDebugMode) {
+                        print("Edit Product");
+                      }
+                    },
+                    icon: Icon(
+                      Icons.edit,
+                      color: Colors.yellow,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(width: 8),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Future<dynamic> _buildShowDialog(BuildContext context, HomeBloc bloc) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text(
+          'Eliminar producto',
+        ),
+        content: Text(
+          '¿Desea eliminar el producto ${product.name}?',
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('Cancelar'),
+          ),
+          TextButton(
+            onPressed: () {
+              //TODO: VALIDATE WITH ORIGINAL CODE
+              bloc.add(DeleteProductEvent(productId: product.id));
+              Navigator.of(context).pop();
+            },
+            child: const Text('Eliminar'),
+          )
+        ],
       ),
     );
   }
