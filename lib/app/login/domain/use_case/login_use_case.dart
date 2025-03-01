@@ -7,7 +7,7 @@ class LoginUseCase {
 
   LoginUseCase({required this.loginRepository});
 
-  bool invoke({required LoginFormModel loginFormModel}) {
+  Future<bool> invoke({required LoginFormModel loginFormModel}) {
     final LoginEntity entity = loginFormModel.toEntity();
     return loginRepository.login(entity);
   }

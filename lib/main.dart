@@ -5,5 +5,6 @@ import 'app/di/dependency_injection.dart';
 
 void main() {
   DependencyInjection.setup();
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MainApp());
 }

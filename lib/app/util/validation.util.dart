@@ -13,9 +13,9 @@ mixin Validation {
     if (value == null || value.isEmpty) {
       return 'Por favor ingrese su contraseña';
     }
-    if (value.length < 6) {
+/*    if (value.length < 6) {
       return 'La contraseña debe tener al menos 6 caracteres';
-    }
+    }*/
     return null;
   }
 }

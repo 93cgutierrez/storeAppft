@@ -1,9 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:storeapp/app/core/data/remote/service/product_service.dart';
+import 'package:storeapp/app/core/data/repository/session_repository_impl.dart';
+import 'package:storeapp/app/core/domain/repository/session_repository.dart';
+import 'package:storeapp/app/core/domain/use_case/logout_use_case.dart';
 import 'package:storeapp/app/form_product/data/repository/form_product_repository_impl.dart';
 import 'package:storeapp/app/form_product/domain/repository/form_product_repository.dart';
 import 'package:storeapp/app/form_product/domain/use_case/add_product_use_case.dart';
+import 'package:storeapp/app/form_product/domain/use_case/get_product_use_case.dart';
 import 'package:storeapp/app/form_product/domain/use_case/update_product_use_case.dart';
 import 'package:storeapp/app/form_product/presentation/bloc/form_product_bloc.dart';
 import 'package:storeapp/app/home/data/repository/home_repository_impl.dart';
@@ -30,6 +34,12 @@ final class DependencyInjection {
         () => ProductService(apiClient: serviceLocator.get()));
 
     //Feature
+    //+core
+    serviceLocator
+        .registerFactory<SessionRepository>(() => SessionRepositoryImpl());
+    serviceLocator.registerFactory<LogoutUseCase>(
+        () => LogoutUseCase(sessionRepository: serviceLocator.get()));
+
     //+Login
     serviceLocator
         .registerFactory<LoginRepository>(() => LoginRepositoryImpl());
@@ -37,6 +47,7 @@ final class DependencyInjection {
         () => LoginUseCase(loginRepository: serviceLocator.get()));
     serviceLocator.registerFactory<LoginBloc>(
         () => LoginBloc(loginUseCase: serviceLocator.get()));
+
     //+Home
     serviceLocator.registerFactory<HomeRepository>(() => HomeRepositoryImpl(
           productService: serviceLocator.get(),
@@ -46,13 +57,15 @@ final class DependencyInjection {
     serviceLocator.registerFactory<DeleteProductsUseCase>(
         () => DeleteProductsUseCase(homeRepository: serviceLocator.get()));
     serviceLocator.registerFactory<HomeBloc>(() => HomeBloc(
-          getProductsUseCase: serviceLocator.get(),
-          deleteProductsUseCase: serviceLocator.get(),
-        ));
+        getProductsUseCase: serviceLocator.get(),
+        deleteProductsUseCase: serviceLocator.get(),
+        logoutUseCase: serviceLocator.get()));
 
     //+FormProduct
     serviceLocator.registerFactory<FormProductRepository>(
         () => FormProductRepositoryImpl(productService: serviceLocator.get()));
+    serviceLocator.registerFactory<GetProductUseCase>(
+        () => GetProductUseCase(formProductRepository: serviceLocator.get()));
     serviceLocator.registerFactory<AddProductUseCase>(
         () => AddProductUseCase(formProductRepository: serviceLocator.get()));
     serviceLocator.registerFactory<UpdateProductUseCase>(() =>

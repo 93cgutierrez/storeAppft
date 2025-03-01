@@ -42,12 +42,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     emit(newState);
   }
 
-  void _submitEvent(
+  Future<void> _submitEvent(
     SubmitEvent event,
     Emitter<LoginState> emit,
-  ) {
+  ) async {
     try {
-      final bool success = loginUseCase.invoke(
+      final bool success = await loginUseCase.invoke(
         loginFormModel: state.model,
       );
       if (success) {
@@ -59,7 +59,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       } else {
         final LoginErrorState newState = LoginErrorState(
           model: state.model,
-          errorMessage: Exception('Login failed'),
+          errorMessage: Exception('Fallo al intentar iniciar sesión'),
         );
         emit(newState);
       }

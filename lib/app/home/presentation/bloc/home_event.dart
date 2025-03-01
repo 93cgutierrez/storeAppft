@@ -9,6 +9,7 @@ final class DeleteProductEvent extends HomeEvent {
   DeleteProductEvent({required this.id});
 }
 
-
-
-
+//logout
+final class LogoutEvent extends HomeEvent {
+  LogoutEvent();
+}

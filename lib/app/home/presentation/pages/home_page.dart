@@ -25,35 +25,76 @@ class HomePage extends StatelessWidget {
       child: BlocProvider.value(
         value: DependencyInjection.serviceLocator.get<HomeBloc>(),
         child: Scaffold(
-            appBar: AppBar(
-              backgroundColor: Colors.blue,
-              title: Text(
-                'Productos',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
+            appBar: PreferredSize(
+              preferredSize: Size.fromHeight(
+                60.0,
               ),
-              centerTitle: true,
-              actions: [
-                IconButton(
-                  onPressed: () {
-                    GoRouter.of(context).pushReplacement(LoginPage.link);
-                  },
-                  icon: Icon(
-                    Icons.logout,
-                    color: Colors.white,
-                  ),
-                ),
-                SizedBox(
-                  width: 4,
-                ),
-              ],
+              child: AppBarWidget(),
             ),
             body: ProductListWidget(),
             floatingActionButton: FabWidget()),
       ),
+    );
+  }
+}
+
+class AppBarWidget extends StatelessWidget {
+  const AppBarWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final bloc = context.read<HomeBloc>();
+    return AppBar(
+      backgroundColor: Colors.blue,
+      title: Text(
+        'Productos',
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      centerTitle: true,
+      actions: [
+        IconButton(
+          onPressed: () async {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) => AlertDialog(
+                title: const Text(
+                  'Cerrar Sesión',
+                ),
+                content: Text(
+                  '¿Estás seguro de cerrar sesión?',
+                ),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('Cancelar'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      bloc.add(LogoutEvent());
+                    },
+                    child: const Text('Cerrar Sesión'),
+                  )
+                ],
+              ),
+            );
+          },
+          icon: Icon(
+            Icons.logout,
+            color: Colors.white,
+          ),
+        ),
+        SizedBox(
+          width: 4,
+        ),
+      ],
     );
   }
 }
@@ -112,6 +153,9 @@ class ProductListWidget extends StatelessWidget {
                         ),
                       ],
                     ));
+
+          case LogoutState():
+            GoRouter.of(context).go(LoginPage.link);
         }
       },
       builder: (context, state) {
@@ -170,10 +214,20 @@ class ProductItemWidget extends StatelessWidget {
         child: SizedBox(
           height: 150.0,
           child: Row(
+            spacing: 4.0,
             children: [
-              Image.network(
-                product.urlImage,
-                fit: BoxFit.cover,
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  color: Colors.transparent,
+                  width: 100.0,
+                  height: 100.0,
+                  child: CircleAvatar(
+                    backgroundImage: NetworkImage(
+                      product.urlImage,
+                    ),
+                  ),
+                ),
               ),
               SizedBox(height: 8),
               Expanded(
