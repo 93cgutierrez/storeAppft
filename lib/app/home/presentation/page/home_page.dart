@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:storeapp/app/di/dependency_injection.dart';
+import 'package:storeapp/app/form_product/presentation/page/form_product_page.dart';
 import 'package:storeapp/app/home/presentation/bloc/home_bloc.dart';
 import 'package:storeapp/app/home/presentation/bloc/home_event.dart';
 import 'package:storeapp/app/home/presentation/bloc/home_state.dart';
@@ -67,10 +68,10 @@ class FabWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return FloatingActionButton(
       onPressed: () {
-        //getProducts
-        final HomeBloc bloc = context.read<HomeBloc>();
-        //bloc.add(GetProductsEvent());
+        GoRouter.of(context).push(FormProductPage.link);
       },
+      backgroundColor: Colors.green,
+      child: Icon(Icons.add),
     );
   }
 }
