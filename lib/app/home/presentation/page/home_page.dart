@@ -193,6 +193,7 @@ class ProductItemWidget extends StatelessWidget {
               ),
               TextButton(
                 onPressed: () {
+                  //TODO: VALIDATE WITH ORIGINAL CODE
                   bloc.add(DeleteProductEvent(productId: product.id));
                   Navigator.of(context).pop();
                 },
