@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:storeapp/app/form_product/presentation/page/form_product_page.dart';
+import 'package:storeapp/app/form_product/presentation/pages/form_product_page.dart';
+import 'package:storeapp/app/home/presentation/pages/home_page.dart';
 import 'package:storeapp/app/signup/presentation/pages/signup_page.dart';
 
-import 'home/presentation/page/home_page.dart';
 import 'login/presentation/page/login_page.dart';
 
 class MainApp extends StatelessWidget {
@@ -34,6 +34,7 @@ class MainApp extends StatelessWidget {
           name: FormProductPage.name,
           builder: (context, state) => FormProductPage(),
         ),
+        //TODO: EDIT PAGE
         //Add more routes here ...
       ],
     );

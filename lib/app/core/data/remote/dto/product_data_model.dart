@@ -31,4 +31,14 @@ class ProductDataModel {
       price: price,
     );
   }
+
+  //toJson
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'image': imageUrl,
+      'price': price.toStringAsFixed(2),
+    };
+  }
 }

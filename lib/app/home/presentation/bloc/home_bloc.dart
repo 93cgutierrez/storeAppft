@@ -1,78 +1,81 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:storeapp/app/home/domain/use_case/delete_product_use_case.dart';
+import 'package:storeapp/app/home/domain/use_case/delete_products_use_case.dart';
 import 'package:storeapp/app/home/domain/use_case/get_products_use_case.dart';
 import 'package:storeapp/app/home/presentation/bloc/home_event.dart';
 import 'package:storeapp/app/home/presentation/bloc/home_state.dart';
 import 'package:storeapp/app/home/presentation/model/product_model.dart';
-import 'package:storeapp/app/util/log.util.dart';
+
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
-  final String _tag = 'HomeBloc';
-  final GetProductsUseCase getProductsUseCase;
-  final DeleteProductUseCase deleteProductUseCase;
 
-  HomeBloc({
-    required this.getProductsUseCase,
-    required this.deleteProductUseCase,
-  }) : super(LoadingState()) {
+final GetProductsUseCase getProductsUseCase;
+final DeleteProductsUseCase deleteProductsUseCase;
+
+  HomeBloc({required this.getProductsUseCase, required this.deleteProductsUseCase}) : super(LoadingState()) {
     on<GetProductsEvent>(_getProductsEvent);
     on<DeleteProductEvent>(_deleteProductEvent);
+
+
   }
 
-  Future<void> _getProductsEvent(
-    GetProductsEvent event,
-    Emitter<HomeState> emit,
-  ) async {
+  void _getProductsEvent(GetProductsEvent event, Emitter<HomeState> emit) async {
+
     late HomeState newState;
+
     try {
+
       newState = LoadingState();
       emit(newState);
-      final List<ProductModel> products = await getProductsUseCase.invoke();
-      if (products.isEmpty) {
+
+      final List<ProductModel> result = await getProductsUseCase.invoke();
+        
+      if (result.isEmpty) {
         newState = EmptyState();
-        emit(newState);
-      } else {
-        newState = DataLoadedState(
-          model: state.model.copyWith(
-            products: products,
-          ),
-        );
-        emit(newState);
+      }else{
+        newState = LoadDataState(model: state.model.copyWith(products: result));
       }
-    } on Exception catch (e) {
-      Log.d(_tag, 'Error obteniendo los productos: ${e.toString()}');
-      newState = ErrorState(
-        model: state.model,
-        errorMessage: 'Error obteniendo los productos: ${e.toString()}',
-      );
-      emit(newState);
+
+      
+    } catch (e) {
+      newState = HomeErrorState(model: state.model, message: "Error al obtener los productos");
     }
+
+    
+
+    emit(newState);
   }
 
-  Future<void> _deleteProductEvent(
-    DeleteProductEvent event,
-    Emitter<HomeState> emit,
-  ) async {
+
+  void _deleteProductEvent(DeleteProductEvent event, Emitter<HomeState> emit) async {
+
     late HomeState newState;
+
     try {
-      newState = LoadingState();
+      // newState = LoadingState();
+      // emit(newState);
+
+    final bool result = await deleteProductsUseCase.invoke(event.id);
+
+    if (result) {
+     newState = LoadingState();
       emit(newState);
-      final bool success = await deleteProductUseCase.invoke(
-        productId: event.productId,
-      );
-      if (success) {
-        await _getProductsEvent(GetProductsEvent(), emit);
-      } else {
-        Log.d(_tag, 'Error eliminando el producto');
-        throw Exception();
+
+      final List<ProductModel> result = await getProductsUseCase.invoke();
+        
+      if (result.isEmpty) {
+        newState = EmptyState();
+      }else{
+        newState = LoadDataState(model: state.model.copyWith(products: result));
       }
-    } on Exception catch (e) {
-      Log.d(_tag, 'Error eliminando el producto: ${e.toString()}');
-      newState = ErrorState(
-        model: state.model,
-        errorMessage: 'Error eliminando el producto: ${e.toString()}',
-      );
-      emit(newState);
+    }else{
+      throw(Exception());
     }
+
+    } catch (e) {
+      newState = HomeErrorState(model: state.model, message: "Error al eliminar el producto");
+      print("😡 $e");
+    }
+      emit(newState);
+
   }
 }

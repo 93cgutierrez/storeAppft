@@ -12,7 +12,7 @@ final class ProductService {
   });
 
   //getAllProducts
-  Future<List<ProductDataModel>> getAllProducts() async {
+  Future<List<ProductDataModel>> getAll() async {
     List<ProductDataModel> products = [];
     try {
       final Response response = await apiClient.get('$baseUrl/products.json');
@@ -33,19 +33,57 @@ final class ProductService {
   }
 
   //deleteProduct
-  Future<void> deleteProduct(String productId) async {
+  Future<bool> delete(String productId) async {
     try {
       final Response response =
           await apiClient.delete('$baseUrl/products/$productId.json');
       if (response.statusCode == 200) {
         Log.i(_tag, 'Producto eliminado exitosamente');
+        return true;
       } else {
         Log.e(_tag, 'Error al eliminar el producto');
-        throw Exception('Error al eliminar el producto');
+        throw Exception();
       }
     } catch (e) {
       Log.e(_tag, e.toString());
       throw Exception('Error al eliminar el producto $e');
+    }
+  }
+
+  //addProduct
+  Future<bool> add(ProductDataModel product) async {
+    try {
+      final Response response = await apiClient.post(
+        '$baseUrl/products.json',
+        data: product.toJson(),
+      );
+      if (response.statusCode == 200) {
+        Log.i(_tag, 'Producto agregado exitosamente');
+        return true;
+      } else {
+        Log.e(_tag, 'Error al agregar el producto');
+        throw Exception();
+      }
+    } catch (e) {
+      Log.e(_tag, e.toString());
+      throw Exception('Error al agregar el producto $e');
+    }
+  }
+
+  //getProduct
+  Future<ProductDataModel> get(String productId) async {
+    try {
+      final Response response =
+          await apiClient.get('$baseUrl/products/$productId.json');
+      if (response.statusCode == 200 && response.data != null) {
+        return ProductDataModel.fromJson(productId, response.data);
+      } else {
+        Log.e(_tag, 'Error al obtener el producto');
+        throw Exception();
+      }
+    } catch (e) {
+      Log.e(_tag, e.toString());
+      throw Exception('Error al obtener el producto $e');
     }
   }
 }

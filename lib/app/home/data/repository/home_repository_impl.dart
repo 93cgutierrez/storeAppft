@@ -1,46 +1,40 @@
-import 'package:storeapp/app/core/data/remote/dto/product_data_model.dart';
 import 'package:storeapp/app/core/data/remote/service/product_service.dart';
 import 'package:storeapp/app/core/domain/entity/product_entity.dart';
 import 'package:storeapp/app/home/domain/repository/home_repository.dart';
-import 'package:storeapp/app/util/log.util.dart';
 
 class HomeRepositoryImpl implements HomeRepository {
-  static const String _tag = 'HomeRepositoryImpl';
+
   final ProductService productService;
 
   HomeRepositoryImpl({required this.productService});
 
   @override
-  Future<bool> deleteProduct({required String productId}) async {
+  Future<bool> deleteProduct(String id) {
+    // TODO: implement deleteProduct
     try {
-      await productService.deleteProduct(productId);
-      return true;
+      
+    return productService.delete(id);
     } catch (e) {
-      Log.e(_tag, e.toString());
-      throw Exception('Error al eliminar el producto $e');
+      throw(Exception(e));
     }
   }
 
   @override
   Future<List<ProductEntity>> getProducts() async {
+    // TODO: implement getProducts
     final List<ProductEntity> products = [];
-    try {
-      final List<ProductDataModel> response =
-          await productService.getAllProducts();
-      for (var product in response) {
-        products.add(
-          ProductEntity(
-            id: product.id,
-            name: product.name,
-            image: product.imageUrl,
-            price: product.price,
-          ),
-        );
-      }
-      return products;
-    } catch (e) {
-      Log.e(_tag, e.toString());
-      throw Exception('Error al obtener los productos $e');
+
+try {
+  
+    final response = await productService.getAll();
+    for (var element in response) {
+      products.add(element.toEntity());
     }
+
+} catch (e) {
+  throw(Exception(e));
+}
+
+    return products;
   }
 }

@@ -1,47 +1,26 @@
 import 'package:storeapp/app/home/presentation/model/home_model.dart';
 
 sealed class HomeState {
+  HomeState({required this.model});
+
   final HomeModel model;
-
-  HomeState({
-    required this.model,
-  });
 }
 
-//empty state
 final class EmptyState extends HomeState {
-  EmptyState()
-      : super(
-          model: HomeModel(
-            products: [],
-          ),
-        );
+  EmptyState() : super(model: HomeModel(products: []));
 }
 
-//loading state
 final class LoadingState extends HomeState {
   final String message;
-  LoadingState({
-    this.message = 'Cargando...',
-  }) : super(
-          model: HomeModel(
-            products: [],
-          ),
-        );
+  LoadingState({this.message = "Cargando Productos..."})
+      : super(model: HomeModel(products: []));
 }
 
-//load data state
-final class DataLoadedState extends HomeState {
-  DataLoadedState({
-    required super.model,
-  });
+final class LoadDataState extends HomeState {
+  LoadDataState({required super.model});
 }
 
-//error state
-final class ErrorState extends HomeState {
-  final String errorMessage;
-  ErrorState({
-    required super.model,
-    required this.errorMessage,
-  });
+final class HomeErrorState extends HomeState {
+  HomeErrorState({required super.model, required this.message});
+  final String message;
 }
