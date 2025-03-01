@@ -1,4 +1,9 @@
 import 'package:get_it/get_it.dart';
+import 'package:storeapp/app/home/data/repository/home_repository_impl.dart';
+import 'package:storeapp/app/home/domain/repository/home_repository.dart';
+import 'package:storeapp/app/home/domain/use_case/delete_product_use_case.dart';
+import 'package:storeapp/app/home/domain/use_case/get_products_use_case.dart';
+import 'package:storeapp/app/home/presentation/bloc/home_bloc.dart';
 import 'package:storeapp/app/login/data/repository/login_repository_impl.dart';
 import 'package:storeapp/app/login/domain/repository/login_repository.dart';
 import 'package:storeapp/app/login/domain/use_case/login_use_case.dart';
@@ -10,11 +15,23 @@ final class DependencyInjection {
   static final GetIt serviceLocator = GetIt.instance;
 
   static void setup() {
+    //Feature
+    //+Login
     serviceLocator
         .registerFactory<LoginRepository>(() => LoginRepositoryImpl());
     serviceLocator.registerFactory<LoginUseCase>(
         () => LoginUseCase(loginRepository: serviceLocator.get()));
     serviceLocator.registerFactory<LoginBloc>(
         () => LoginBloc(loginUseCase: serviceLocator.get()));
+    //-Home
+    serviceLocator.registerFactory<HomeRepository>(() => HomeRepositoryImpl());
+    serviceLocator.registerFactory<GetProductsUseCase>(
+        () => GetProductsUseCase(homeRepository: serviceLocator.get()));
+    serviceLocator.registerFactory<DeleteProductUseCase>(
+        () => DeleteProductUseCase(homeRepository: serviceLocator.get()));
+    serviceLocator.registerFactory<HomeBloc>(() => HomeBloc(
+          getProductsUseCase: serviceLocator.get(),
+          deleteProductUseCase: serviceLocator.get(),
+        ));
   }
 }

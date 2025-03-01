@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:storeapp/app/di/dependency_injection.dart';
+import 'package:storeapp/app/home/presentation/bloc/home_bloc.dart';
+import 'package:storeapp/app/home/presentation/bloc/home_state.dart';
 import 'package:storeapp/app/login/presentation/page/login_page.dart';
 
 class HomePage extends StatelessWidget {
@@ -12,39 +16,62 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.blue,
-          title: Text(
-            'Productos',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          centerTitle: true,
-          actions: [
-            IconButton(
-              onPressed: () {
-                GoRouter.of(context).pushReplacement(LoginPage.link);
-              },
-              icon: Icon(
-                Icons.logout,
+      child: BlocProvider.value(
+        value: DependencyInjection.serviceLocator<HomeBloc>(),
+        child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.blue,
+            title: Text(
+              'Productos',
+              style: TextStyle(
                 color: Colors.white,
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(
-              width: 4,
-            ),
-          ],
-        ),
-        body: ListView.builder(
-          itemCount: 2,
-          itemBuilder: (context, index) => ProductItemWidget(
-            index: index,
+            centerTitle: true,
+            actions: [
+              IconButton(
+                onPressed: () {
+                  GoRouter.of(context).pushReplacement(LoginPage.link);
+                },
+                icon: Icon(
+                  Icons.logout,
+                  color: Colors.white,
+                ),
+              ),
+              SizedBox(
+                width: 4,
+              ),
+            ],
           ),
+          body: ProductListWidget(),
         ),
+      ),
+    );
+  }
+}
+
+class ProductListWidget extends StatelessWidget {
+  const ProductListWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<HomeBloc, HomeState>(
+      listener: (context, state) {
+        // TODO: implement listener}
+      },
+      child: BlocBuilder<HomeBloc, HomeState>(
+        builder: (context, state) {
+          return ListView.builder(
+            itemCount: 2,
+            itemBuilder: (context, index) => ProductItemWidget(
+              index: index,
+            ),
+          );
+        },
       ),
     );
   }
