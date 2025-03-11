@@ -5,13 +5,11 @@ class DeleteProductsUseCase {
 
   DeleteProductsUseCase({required this.homeRepository});
 
-  Future<bool> invoke(String id){
-
-try {
-  
-    return homeRepository.deleteProduct(id);
-} catch (e) {
-  throw(Exception(e));
-}
+  Future<bool> invoke(String id) {
+    try {
+      return homeRepository.deleteProduct(id);
+    } catch (e) {
+      throw (Exception(e));
+    }
   }
 }

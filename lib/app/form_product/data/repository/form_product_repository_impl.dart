@@ -1,38 +1,24 @@
-import 'package:storeapp/app/core/data/remote/service/product_service.dart';
 import 'package:storeapp/app/core/domain/entity/product_entity.dart';
+import 'package:storeapp/app/form_product/domain/datasource/form_product_api_datasource.dart';
 import 'package:storeapp/app/form_product/domain/repository/form_product_repository.dart';
 
 class FormProductRepositoryImpl implements FormProductRepository {
-  final ProductService productService;
+  final FormProductDatasource formProductDatasource;
 
-  FormProductRepositoryImpl({required this.productService});
+  FormProductRepositoryImpl({required this.formProductDatasource});
 
   @override
-  Future<bool> addProduct(ProductEntity productEntity) {
-    try {
-      return productService.add(productEntity.toProductDataModel());
-    } catch (e) {
-      throw (Exception());
-    }
+  Future<bool> addProduct(ProductEntity productEntity) async {
+    return await formProductDatasource.addProduct(productEntity);
   }
 
   @override
   Future<ProductEntity> getProduct(String id) async {
-    // TODO: implement getProduct
-    try {
-      final response = await productService.get(id);
-      return response.toEntity();
-    } catch (e) {
-      throw (Exception());
-    }
+    return await formProductDatasource.getProduct(id);
   }
 
   @override
-  Future<bool> updateProduct(ProductEntity productEntity) {
-    try {
-      return productService.update(productEntity.toProductDataModel());
-    } catch (e) {
-      throw (Exception());
-    }
+  Future<bool> updateProduct(ProductEntity productEntity) async {
+    return await formProductDatasource.updateProduct(productEntity);
   }
 }
