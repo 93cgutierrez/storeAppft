@@ -155,10 +155,11 @@ class _BodyLoginWidgetState extends State<BodyLoginWidget> with Validation {
                   spacing: 20,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    state.model.email.isEmpty && state.model.password.isEmpty
-                        ? CircularProgressIndicator()
-                        : Text(
-                            "Result: ${state is LoginSuccessState ? state.success : "N/A"}"),
+                    state.model.email.isNotEmpty &&
+                            state.model.password.isNotEmpty
+                        ? Text(
+                            "Result: ${state is LoginSuccessState ? state.success : "N/A"}")
+                        : Container(),
                     TextFormField(
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       controller: widget._usernameController,

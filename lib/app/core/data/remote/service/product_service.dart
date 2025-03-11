@@ -5,7 +5,8 @@ import 'package:storeapp/app/util/log.util.dart';
 final class ProductService {
   static const String _tag = 'ProductService';
   final Dio apiClient;
-  final String baseUrl = 'https://storeappdamo2024-default-rtdb.firebaseio.com';
+  final String baseUrl =
+      'https://especializacion-mobile-default-rtdb.firebaseio.com';
 
   ProductService({
     required this.apiClient,

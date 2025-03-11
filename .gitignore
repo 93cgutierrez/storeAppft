@@ -46,8 +46,6 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
-# FVM Version Cache
-.fvm/!/pubspec.lock
 /lib/firebase_options.dart
 /macos/Podfile.lock
 /.fvm/versions/3.27.1/
@@ -57,3 +55,7 @@ app.*.map.json
 /.fvm/version
 /.fvmrc
 /.metadata
+
+# FVM Version Cache
+.fvm/
+/.fvm/
