@@ -4,7 +4,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:storeapp/app/form_product/presentation/pages/form_product_page.dart';
 import 'package:storeapp/app/home/presentation/pages/home_page.dart';
 import 'package:storeapp/app/signup/presentation/pages/signup_page.dart';
+import 'package:storeapp/app/util/parameters.dart';
 
+import 'di/dependency_injection.dart';
 import 'login/presentation/page/login_page.dart';
 
 class MainApp extends StatelessWidget {
@@ -20,9 +22,11 @@ class MainApp extends StatelessWidget {
           name: LoginPage.name,
           builder: (context, state) => LoginPage(),
           redirect: (context, state) async {
-            final SharedPreferences prefs =
-                await SharedPreferences.getInstance();
-            final bool isLogged = prefs.getBool('isLogged') ?? false;
+            //call SharedPreferences from getIt
+            final prefs =
+                DependencyInjection.serviceLocator<SharedPreferences>();
+            final bool isLogged =
+                prefs.getBool(Parameters.isLoggedKey) ?? false;
             if (isLogged) {
               return HomePage.link;
             }
@@ -38,9 +42,11 @@ class MainApp extends StatelessWidget {
           name: HomePage.name,
           builder: (context, state) => HomePage(),
           redirect: (context, state) async {
-            final SharedPreferences prefs =
-                await SharedPreferences.getInstance();
-            final bool isLogged = prefs.getBool('isLogged') ?? false;
+            //call SharedPreferences from getIt
+            final prefs =
+                DependencyInjection.serviceLocator<SharedPreferences>();
+            final bool isLogged =
+                prefs.getBool(Parameters.isLoggedKey) ?? false;
             if (!isLogged) {
               return LoginPage.link;
             }

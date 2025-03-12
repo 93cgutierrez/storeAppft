@@ -1,7 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:storeapp/app/core/data/datasource/session_local_datasource_impl.dart';
 import 'package:storeapp/app/core/data/remote/service/product_service.dart';
 import 'package:storeapp/app/core/data/repository/session_repository_impl.dart';
+import 'package:storeapp/app/core/domain/datasource/session_datasource.dart';
 import 'package:storeapp/app/core/domain/repository/session_repository.dart';
 import 'package:storeapp/app/core/domain/use_case/logout_use_case.dart';
 import 'package:storeapp/app/form_product/data/datasource/form_product_api_datasource_impl.dart';
@@ -19,7 +22,9 @@ import 'package:storeapp/app/home/domain/repository/home_repository.dart';
 import 'package:storeapp/app/home/domain/use_case/delete_products_use_case.dart';
 import 'package:storeapp/app/home/domain/use_case/get_products_use_case.dart';
 import 'package:storeapp/app/home/presentation/bloc/home_bloc.dart';
+import 'package:storeapp/app/login/data/datasource/login_local_datasource_impl.dart';
 import 'package:storeapp/app/login/data/repository/login_repository_impl.dart';
+import 'package:storeapp/app/login/domain/datasource/login_datasource.dart';
 import 'package:storeapp/app/login/domain/repository/login_repository.dart';
 import 'package:storeapp/app/login/domain/use_case/login_use_case.dart';
 import 'package:storeapp/app/login/presentation/bloc/login_bloc.dart';
@@ -29,7 +34,11 @@ final class DependencyInjection {
 
   static final GetIt serviceLocator = GetIt.instance;
 
-  static void setup() {
+  static Future<void> setup() async {
+    //SharedPreferences
+    serviceLocator.registerSingletonAsync(
+        () async => await SharedPreferences.getInstance());
+
     //Service
     //+Dio
     serviceLocator.registerSingleton<Dio>(Dio());
@@ -39,14 +48,18 @@ final class DependencyInjection {
 
     //Feature
     //+core
-    serviceLocator
-        .registerFactory<SessionRepository>(() => SessionRepositoryImpl());
+    serviceLocator.registerFactory<SessionDatasource>(
+        () => SessionLocalDatasourceImpl(prefs: serviceLocator.get()));
+    serviceLocator.registerFactory<SessionRepository>(
+        () => SessionRepositoryImpl(sessionDatasource: serviceLocator.get()));
     serviceLocator.registerFactory<LogoutUseCase>(
         () => LogoutUseCase(sessionRepository: serviceLocator.get()));
 
     //+Login
-    serviceLocator
-        .registerFactory<LoginRepository>(() => LoginRepositoryImpl());
+    serviceLocator.registerFactory<LoginDatasource>(
+        () => LoginLocalDatasourceImpl(prefs: serviceLocator.get()));
+    serviceLocator.registerFactory<LoginRepository>(
+        () => LoginRepositoryImpl(loginDatasource: serviceLocator.get()));
     serviceLocator.registerFactory<LoginUseCase>(
         () => LoginUseCase(loginRepository: serviceLocator.get()));
     serviceLocator.registerFactory<LoginBloc>(
