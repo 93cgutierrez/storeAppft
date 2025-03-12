@@ -8,8 +8,7 @@ import 'package:storeapp/app/form_product/presentation/bloc/form_product_bloc.da
 import 'package:storeapp/app/form_product/presentation/bloc/form_product_event.dart';
 import 'package:storeapp/app/form_product/presentation/bloc/form_product_state.dart';
 import 'package:storeapp/app/util/log.util.dart';
-
-import 'login_mixin.dart';
+import 'package:storeapp/app/util/validation.util.dart';
 
 const String _tag = 'FormProductPage';
 
@@ -74,7 +73,7 @@ class BodyLoginWidget extends StatefulWidget {
   State<BodyLoginWidget> createState() => _BodyLoginWidgetState();
 }
 
-class _BodyLoginWidgetState extends State<BodyLoginWidget> with LoginMixin {
+class _BodyLoginWidgetState extends State<BodyLoginWidget> with Validation {
   bool _showPassword = false;
   Timer? _autoShowTimer;
   final keyForm = GlobalKey<FormState>();
