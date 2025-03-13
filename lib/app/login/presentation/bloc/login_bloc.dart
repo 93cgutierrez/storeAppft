@@ -64,7 +64,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         emit(newState);
       }
     } catch (e) {
-      Log.e(_tag, e.toString());
+      Log.e(_tag, 'Error: $e');
       final LoginErrorState newState = LoginErrorState(
         model: state.model,
         errorMessage: e as Exception,
