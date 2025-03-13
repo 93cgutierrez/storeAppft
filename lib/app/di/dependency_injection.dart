@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:storeapp/app/core/data/datasource/session_local_datasource_impl.dart';
 import 'package:storeapp/app/core/data/remote/service/product_service.dart';
+import 'package:storeapp/app/core/data/remote/service/user_service.dart';
 import 'package:storeapp/app/core/data/repository/session_repository_impl.dart';
 import 'package:storeapp/app/core/domain/datasource/session_datasource.dart';
 import 'package:storeapp/app/core/domain/repository/session_repository.dart';
@@ -28,6 +29,12 @@ import 'package:storeapp/app/login/domain/datasource/login_datasource.dart';
 import 'package:storeapp/app/login/domain/repository/login_repository.dart';
 import 'package:storeapp/app/login/domain/use_case/login_use_case.dart';
 import 'package:storeapp/app/login/presentation/bloc/login_bloc.dart';
+import 'package:storeapp/app/signup/data/datasource/signup_api_datasource_impl.dart';
+import 'package:storeapp/app/signup/data/respository/signup_repository_impl.dart';
+import 'package:storeapp/app/signup/domain/datasource/signup_datasource.dart';
+import 'package:storeapp/app/signup/domain/repository/signup_repository.dart';
+import 'package:storeapp/app/signup/domain/use_case/create_user_use_case.dart';
+import 'package:storeapp/app/signup/presentation/bloc/signup_bloc.dart';
 
 final class DependencyInjection {
   DependencyInjection._();
@@ -45,6 +52,9 @@ final class DependencyInjection {
     //+ProductService
     serviceLocator.registerFactory<ProductService>(
         () => ProductService(apiClient: serviceLocator.get()));
+    //+UserService
+    serviceLocator.registerFactory<UserService>(
+        () => UserService(apiClient: serviceLocator.get()));
 
     //Feature
     //+core
@@ -97,6 +107,17 @@ final class DependencyInjection {
         getProductUseCase: serviceLocator.get(),
         updateProductUseCase: serviceLocator.get(),
       ),
+    );
+
+    //+signup(register User)
+    serviceLocator.registerFactory<SignupDatasource>(
+        () => SignupApiDatasourceImpl(userService: serviceLocator.get()));
+    serviceLocator.registerFactory<SignupRepository>(
+        () => SignUpRepositoryImpl(signupDatasource: serviceLocator.get()));
+    serviceLocator.registerFactory<CreateUserUseCase>(
+        () => CreateUserUseCase(signupRepository: serviceLocator.get()));
+    serviceLocator.registerFactory<SignupBloc>(
+      () => SignupBloc(createUserUseCase: serviceLocator.get()),
     );
   }
 }

@@ -23,9 +23,13 @@ final class SignupEmailChangedEvent extends SignupEvent {
 
 //password
 final class SignupPasswordChangedEvent extends SignupEvent {
+  final String confirmPassword;
   final String password;
 
-  SignupPasswordChangedEvent({required this.password});
+  SignupPasswordChangedEvent({
+    required this.password,
+    required this.confirmPassword,
+  });
 }
 
 //confirm password

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:storeapp/app/di/dependency_injection.dart';
 import 'package:storeapp/app/shared/widget/password_input_field_widget.dart';
 import 'package:storeapp/app/signup/presentation/bloc/signup_bloc.dart';
-import 'package:storeapp/app/signup/presentation/model/profile_model.dart';
+import 'package:storeapp/app/signup/presentation/bloc/signup_event.dart';
+import 'package:storeapp/app/signup/presentation/bloc/signup_state.dart';
 import 'package:storeapp/app/util/log.util.dart';
 import 'package:storeapp/app/util/validation.util.dart';
-
-import '../bloc/signup_bloc.dart';
 
 const String _tag = 'SignupPage';
 
@@ -26,14 +27,11 @@ class _SignupPageState extends State<SignupPage> {
 
   //controller
   final TextEditingController _nameController = TextEditingController();
-
+  final TextEditingController _documentController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-
   final TextEditingController _passwordController = TextEditingController();
-
   final TextEditingController _confirmPasswordController =
       TextEditingController();
-
   final TextEditingController _imageProfileUrlController =
       TextEditingController();
 
@@ -53,6 +51,7 @@ class _SignupPageState extends State<SignupPage> {
     Log.d(_tag, 'dispose');
     //dispose controllers
     _nameController.dispose();
+    _documentController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
@@ -61,53 +60,49 @@ class _SignupPageState extends State<SignupPage> {
 
   @override
   Widget build(BuildContext context) {
-    //TODO: 20250213 homework
-    //name
-    //email
-    //password
-    //confirm password
-    //imageProfileUrl
-    //imageview render before url
-    //sign up button
-    return SafeArea(
-      child: Scaffold(
-        resizeToAvoidBottomInset: true,
-        appBar: AppBar(
-          backgroundColor: Colors.blue,
-          title: Text(
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
+    return BlocProvider.value(
+      value: DependencyInjection.serviceLocator<SignupBloc>(),
+      child: SafeArea(
+        child: Scaffold(
+          resizeToAvoidBottomInset: true,
+          appBar: AppBar(
+            backgroundColor: Colors.blue,
+            title: Text(
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+              'Registro',
             ),
-            'Registro',
-          ),
-          centerTitle: true,
-          leading: IconButton(
-            icon: const Icon(
-              Icons.arrow_back,
-              color: Colors.white,
+            centerTitle: true,
+            leading: IconButton(
+              icon: const Icon(
+                Icons.arrow_back,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                Navigator.pop(context); // Navigate back
+              },
             ),
-            onPressed: () {
-              Navigator.pop(context); // Navigate back
-            },
           ),
-        ),
-        body: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              spacing: 20,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                BodySignupWidget(
-                  formKey: _formKey,
-                  nameController: _nameController,
-                  emailController: _emailController,
-                  passwordController: _passwordController,
-                  confirmPasswordController: _confirmPasswordController,
-                  imageProfileUrlController: _imageProfileUrlController,
-                ),
-              ],
+          body: Center(
+            child: SingleChildScrollView(
+              child: Column(
+                spacing: 20,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  BodySignupWidget(
+                    formKey: _formKey,
+                    nameController: _nameController,
+                    documentController: _documentController,
+                    emailController: _emailController,
+                    passwordController: _passwordController,
+                    confirmPasswordController: _confirmPasswordController,
+                    imageProfileUrlController: _imageProfileUrlController,
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -119,6 +114,7 @@ class _SignupPageState extends State<SignupPage> {
     Log.d(_tag, '_loadInitialData');
     //load initial data
     //_nameController.text = 'John Doe';
+    //_documentController.text = '123456789';
     //_emailController.text = 'john.doe@example.com';
     //_passwordController.text = 'password';
     //_confirmPasswordController.text = 'password';
@@ -131,12 +127,14 @@ class BodySignupWidget extends StatefulWidget {
     super.key,
     required GlobalKey<FormState> formKey,
     required TextEditingController nameController,
+    required TextEditingController documentController,
     required TextEditingController emailController,
     required TextEditingController passwordController,
     required TextEditingController confirmPasswordController,
     required TextEditingController imageProfileUrlController,
   })  : _formKey = formKey,
         _nameController = nameController,
+        _documentController = documentController,
         _emailController = emailController,
         _passwordController = passwordController,
         _confirmPasswordController = confirmPasswordController,
@@ -144,6 +142,7 @@ class BodySignupWidget extends StatefulWidget {
 
   final GlobalKey<FormState> _formKey;
   final TextEditingController _nameController;
+  final TextEditingController _documentController;
   final TextEditingController _emailController;
   final TextEditingController _passwordController;
   final TextEditingController _confirmPasswordController;
@@ -156,12 +155,52 @@ class BodySignupWidget extends StatefulWidget {
 class _BodySignupWidgetState extends State<BodySignupWidget> with Validation {
   @override
   Widget build(BuildContext context) {
-    final SignupBloc = context.read<SignupBloc>();
+    final SignupBloc bloc = context.read<SignupBloc>();
     return BlocConsumer<SignupBloc, SignupState>(
       listener: (context, state) {
-        // TODO: implement listener
+        switch (state) {
+          case SignupInitial() || DataUpdatedState():
+            break;
+          case SignUpSuccessState():
+            Log.d(_tag, 'Sign up success');
+            //show snackbar
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Registro exitoso'),
+              ),
+            );
+            break;
+          case SignUpErrorState():
+            Log.d(_tag, 'Sign up error');
+            showDialog(
+                context: context,
+                builder: (BuildContext context) => AlertDialog(
+                      title: const Text(
+                        'Error en registro',
+                      ),
+                      content: Text(
+                        state.errorMessage.toString(),
+                      ),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () {
+                            GoRouter.of(context).pop();
+                            //Navigator.of(context).pop();
+                          },
+                          child: const Text('OK'),
+                        ),
+                      ],
+                    ));
+            break;
+        }
       },
       builder: (context, state) {
+        widget._nameController.text = state.model.name;
+        widget._documentController.text = state.model.document;
+        widget._emailController.text = state.model.email;
+        widget._passwordController.text = state.model.password;
+        widget._confirmPasswordController.text = state.model.confirmPassword;
+        widget._imageProfileUrlController.text = state.model.imageProfileUrl;
         return Container(
           margin: EdgeInsets.symmetric(horizontal: 32.0),
           child: Form(
@@ -194,6 +233,27 @@ class _BodySignupWidgetState extends State<BodySignupWidget> with Validation {
                   ),
                   onChanged: (value) {
                     widget._nameController.text = value;
+                    bloc.add(SignupNameChangedEvent(
+                      name: widget._nameController.text,
+                    ));
+                  },
+                ),
+                //document
+                TextFormField(
+                  controller: widget._documentController,
+                  decoration: InputDecoration(
+                    icon: Icon(Icons.credit_card),
+                    labelText: 'Numero de documento',
+                    hintText: 'Ingrese su numero de documento',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  onChanged: (value) {
+                    widget._documentController.text = value.trim();
+                    bloc.add(SignupDocumentChangedEvent(
+                      document: widget._documentController.text,
+                    ));
                   },
                 ),
                 //email
@@ -208,6 +268,12 @@ class _BodySignupWidgetState extends State<BodySignupWidget> with Validation {
                     ),
                   ),
                   validator: validateEmail,
+                  onChanged: (value) {
+                    widget._emailController.text = value.trim();
+                    bloc.add(SignupEmailChangedEvent(
+                      email: widget._emailController.text,
+                    ));
+                  },
                 ),
                 //password
                 PasswordInputFieldWidget(
@@ -215,6 +281,13 @@ class _BodySignupWidgetState extends State<BodySignupWidget> with Validation {
                   icon: Icon(Icons.lock),
                   labelText: 'Contraseña',
                   hintText: 'Ingrese su contraseña',
+                  onChanged: (value) {
+                    widget._passwordController.text = value.trim();
+                    bloc.add(SignupPasswordChangedEvent(
+                      password: widget._passwordController.text,
+                      confirmPassword: widget._confirmPasswordController.text,
+                    ));
+                  },
                 ),
                 //confirm password
                 PasswordInputFieldWidget(
@@ -222,6 +295,13 @@ class _BodySignupWidgetState extends State<BodySignupWidget> with Validation {
                   icon: Icon(Icons.lock),
                   labelText: 'Confirmar Contraseña',
                   hintText: 'Confirme su contraseña',
+                  onChanged: (value) {
+                    widget._confirmPasswordController.text = value.trim();
+                    bloc.add(SignupConfirmPasswordChangedEvent(
+                      password: widget._passwordController.text,
+                      confirmPassword: widget._confirmPasswordController.text,
+                    ));
+                  },
                 ),
                 //imageProfileUrl
                 TextFormField(
@@ -238,9 +318,12 @@ class _BodySignupWidgetState extends State<BodySignupWidget> with Validation {
                     ),
                   ),
                   onChanged: (String value) {
-                    setState(() {
-                      widget._imageProfileUrlController.text = value;
-                    });
+                    //setState(() {
+                    widget._imageProfileUrlController.text = value;
+                    //});
+                    bloc.add(SignupImageProfileUrlChangedEvent(
+                      imageProfileUrl: widget._imageProfileUrlController.text,
+                    ));
                   },
                 ),
                 SizedBox(
@@ -256,6 +339,7 @@ class _BodySignupWidgetState extends State<BodySignupWidget> with Validation {
                       // Handle sign up logic here
                       Log.d(_tag, 'Sign up button pressed');
                       _validateAndSaveProfile(
+                        bloc: bloc,
                         name: widget._nameController.text,
                         email: widget._emailController.text,
                         password: widget._passwordController.text,
@@ -287,6 +371,7 @@ class _BodySignupWidgetState extends State<BodySignupWidget> with Validation {
     required String password,
     required String confirmPassword,
     required String imageProfileUrl,
+    required SignupBloc bloc,
   }) {
     if (widget._nameController.text.isEmpty ||
         widget._emailController.text.isEmpty ||
@@ -313,16 +398,7 @@ class _BodySignupWidgetState extends State<BodySignupWidget> with Validation {
       Log.d(_tag, 'Passwords do not match');
       return false;
     }
-
-    ProfileModel profile = ProfileModel(
-      name: widget._nameController.text,
-      document: widget._documentController.text,
-      email: widget._emailController.text,
-      password: widget._passwordController.text,
-      imageProfileUrl: widget._imageProfileUrlController.text,
-    );
-    Log.d(_tag, 'Profile: $profile');
-    //TODO: 20250218 PENDING SAVE PROFILE
+    bloc.add(SignupSubmitEvent());
     return true;
   }
 }

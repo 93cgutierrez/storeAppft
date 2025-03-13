@@ -25,7 +25,7 @@ final class UserService {
         ),
       );
       if (response.statusCode == 200) {
-        Log.i(_tag, 'Usuario creado exitosamente');
+        Log.i(_tag, 'Usuario creado exitosamente id: ${response.data['name']}');
         return true;
       } else {
         Log.e(_tag,

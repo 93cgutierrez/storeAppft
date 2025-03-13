@@ -1,4 +1,4 @@
-import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:storeapp/app/signup/domain/use_case/create_user_use_case.dart';
 import 'package:storeapp/app/signup/presentation/bloc/signup_event.dart';
 import 'package:storeapp/app/signup/presentation/bloc/signup_state.dart';
@@ -76,7 +76,7 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
     Emitter<SignupState> emit,
   ) async {
     final ProfileModel newData = state.model.copyWith(
-      password: event.password,
+      confirmPassword: event.confirmPassword,
     );
     final DataUpdatedState newState = DataUpdatedState(
       model: newData,

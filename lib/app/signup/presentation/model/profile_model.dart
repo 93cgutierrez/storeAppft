@@ -6,6 +6,7 @@ class ProfileModel {
   String document;
   String email;
   String password;
+  String confirmPassword;
   String imageProfileUrl;
 
   //empty constructor
@@ -15,6 +16,7 @@ class ProfileModel {
         document = '',
         email = '',
         password = '',
+        confirmPassword = '',
         imageProfileUrl = '';
 
   ProfileModel({
@@ -23,6 +25,7 @@ class ProfileModel {
     required this.document,
     required this.email,
     required this.password,
+    required this.confirmPassword,
     required this.imageProfileUrl,
   });
 
@@ -32,6 +35,7 @@ class ProfileModel {
     String? document,
     String? email,
     String? password,
+    String? confirmPassword,
     String? imageProfileUrl,
   }) {
     return ProfileModel(
@@ -40,29 +44,8 @@ class ProfileModel {
       document: document ?? this.document,
       email: email ?? this.email,
       password: password ?? this.password,
+      confirmPassword: confirmPassword ?? this.confirmPassword,
       imageProfileUrl: imageProfileUrl ?? this.imageProfileUrl,
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'name': name,
-      'document': document,
-      'email': email,
-      'password': password,
-      'imageProfileUrl': imageProfileUrl,
-    };
-  }
-
-  factory ProfileModel.fromMap(Map<String, dynamic> map) {
-    return ProfileModel(
-      id: map['id'],
-      name: map['name'],
-      document: map['document'],
-      email: map['email'],
-      password: map['password'],
-      imageProfileUrl: map['image'],
     );
   }
 
@@ -81,6 +64,6 @@ class ProfileModel {
   //toString
   @override
   String toString() {
-    return 'ProfileModel{id: $id, name: $name, document: $document, email: $email, imageProfileUrl: $imageProfileUrl}';
+    return 'ProfileModel{id: $id, name: $name, document: $document, email: $email, password: $password, confirmPassword: $confirmPassword, imageProfileUrl: $imageProfileUrl}';
   }
 }
