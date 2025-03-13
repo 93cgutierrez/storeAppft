@@ -8,11 +8,7 @@ class CreateUserUseCase {
   CreateUserUseCase({required this.signupRepository});
 
   Future<bool> invoke({required ProfileModel profileModel}) async {
-    try {
-      final UserEntity data = profileModel.toUserEntity();
-      return signupRepository.createUser(data);
-    } catch (e) {
-      throw (Exception());
-    }
+    final UserEntity data = profileModel.toUserEntity();
+    return signupRepository.createUser(data);
   }
 }

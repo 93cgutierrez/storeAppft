@@ -59,7 +59,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       } else {
         final LoginErrorState newState = LoginErrorState(
           model: state.model,
-          errorMessage: Exception('Fallo al intentar iniciar sesión'),
+          errorMessage: Exception('Por favor, valide sus datos'),
         );
         emit(newState);
       }

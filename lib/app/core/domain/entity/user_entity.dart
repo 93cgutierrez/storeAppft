@@ -28,4 +28,23 @@ class UserEntity {
       imageProfileUrl: imageProfileUrl,
     );
   }
+
+  //copyWith
+  UserEntity copyWith({
+    String? id,
+    String? name,
+    String? document,
+    String? email,
+    String? password,
+    String? imageProfileUrl,
+  }) {
+    return UserEntity(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      document: document ?? this.document,
+      email: email ?? this.email,
+      password: password ?? this.password,
+      imageProfileUrl: imageProfileUrl ?? this.imageProfileUrl,
+    );
+  }
 }

@@ -23,7 +23,9 @@ class FormProductBloc extends Bloc<FormProductEvent, FormProductState> {
   }
 
   void _nameChangedEvent(
-      NameChangedEvent event, Emitter<FormProductState> emit) {
+    NameChangedEvent event,
+    Emitter<FormProductState> emit,
+  ) {
     final newState = DataUpdateState(
       model: state.model.copyWith(name: event.name),
     );
@@ -53,7 +55,10 @@ class FormProductBloc extends Bloc<FormProductEvent, FormProductState> {
     emit(newState);
   }
 
-  void _submitEvent(SubmitEvent event, Emitter<FormProductState> emit) async {
+  void _submitEvent(
+    SubmitEvent event,
+    Emitter<FormProductState> emit,
+  ) async {
     late final FormProductState newState;
     try {
       final bool result;

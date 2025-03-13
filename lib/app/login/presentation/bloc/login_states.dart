@@ -12,8 +12,11 @@ final class InitialState extends LoginState {
   InitialState()
       : super(
           model: LoginFormModel(
-            email: '',
-            password: '',
+            //TODO: TEMPORAL FOR TESTING
+/*            email: '',
+            password: '',*/
+            email: 'iooo@gmail.com',
+            password: '456789',
           ),
         );
 }
@@ -27,6 +30,7 @@ final class DataUpdatedState extends LoginState {
 //loginSuccessState
 class LoginSuccessState extends LoginState {
   final bool success;
+
   LoginSuccessState({
     required super.model,
     required this.success,
@@ -36,6 +40,7 @@ class LoginSuccessState extends LoginState {
 //LoginErrorState
 class LoginErrorState extends LoginState {
   final Exception errorMessage;
+
   LoginErrorState({
     required super.model,
     required this.errorMessage,

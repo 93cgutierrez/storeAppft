@@ -121,7 +121,7 @@ class _BodyLoginWidgetState extends State<BodyLoginWidget> with Validation {
                 context: context,
                 builder: (BuildContext context) => AlertDialog(
                       title: const Text(
-                        'Error de inicio de sesión',
+                        'Error en inicio de sesión',
                       ),
                       content: Text(
                         state.errorMessage.toString(),
