@@ -1,12 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:storeapp/app/core/data/remote/dto/product_data_model.dart';
 import 'package:storeapp/app/util/log.util.dart';
+import 'package:storeapp/app/util/parameters.dart';
 
 final class ProductService {
   static const String _tag = 'ProductService';
   final Dio apiClient;
-  final String baseUrl =
-      'https://especializacion-mobile-default-rtdb.firebaseio.com';
+  final String baseUrl = Parameters.baseUrl;
 
   ProductService({
     required this.apiClient,
