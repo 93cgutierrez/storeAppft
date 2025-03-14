@@ -14,9 +14,6 @@ final class InitialState extends LoginState {
           model: LoginFormModel(
             email: '',
             password: '',
-            //TODO: TEMPORAL FOR TESTING
-/*            email: 'iooo@gmail.com',
-            password: '456789',*/
           ),
         );
 }
