@@ -5,7 +5,7 @@ class UserEntity {
   final String name;
   final String document;
   final String email;
-  final String password;
+  final String? password;
   final String imageProfileUrl;
 
   UserEntity({
@@ -24,7 +24,7 @@ class UserEntity {
       name: name,
       document: document,
       email: email,
-      password: password,
+      password: password ?? '',
       imageProfileUrl: imageProfileUrl,
     );
   }

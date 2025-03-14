@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:storeapp/app/form_product/presentation/pages/form_product_page.dart';
 import 'package:storeapp/app/home/presentation/pages/home_page.dart';
 import 'package:storeapp/app/signup/presentation/pages/signup_page.dart';
+import 'package:storeapp/app/user/presentation/pages/users_page.dart';
 import 'package:storeapp/app/util/parameters.dart';
 
 import 'di/dependency_injection.dart';
@@ -30,6 +31,7 @@ class MainApp extends StatelessWidget {
             if (isLogged) {
               return HomePage.link;
             }
+            return null;
           },
         ),
         GoRoute(
@@ -58,12 +60,16 @@ class MainApp extends StatelessWidget {
           name: FormProductPage.name,
           builder: (context, state) => FormProductPage(),
         ),
-        //..
         GoRoute(
           path: FormProductPage.linkUpdate,
           name: FormProductPage.nameUpdate,
           builder: (context, state) =>
               FormProductPage(id: state.pathParameters[FormProductPage.idKey]),
+        ),
+        GoRoute(
+          path: UsersPage.link,
+          name: UsersPage.name,
+          builder: (context, state) => UsersPage(),
         ),
       ],
     );

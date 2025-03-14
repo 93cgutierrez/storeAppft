@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:storeapp/app/core/data/datasource/session_local_datasource_impl.dart';
+import 'package:storeapp/app/core/data/datasource/session_firebase_datasource_impl.dart';
 import 'package:storeapp/app/core/data/remote/service/product_service.dart';
 import 'package:storeapp/app/core/data/remote/service/user_service.dart';
 import 'package:storeapp/app/core/data/repository/session_repository_impl.dart';
@@ -36,6 +36,12 @@ import 'package:storeapp/app/signup/domain/datasource/signup_datasource.dart';
 import 'package:storeapp/app/signup/domain/repository/signup_repository.dart';
 import 'package:storeapp/app/signup/domain/use_case/create_user_use_case.dart';
 import 'package:storeapp/app/signup/presentation/bloc/signup_bloc.dart';
+import 'package:storeapp/app/user/data/datasource/user_api_datasource_impl.dart';
+import 'package:storeapp/app/user/data/repository/user_repository_imp.dart';
+import 'package:storeapp/app/user/domain/datasource/user_datasource.dart';
+import 'package:storeapp/app/user/domain/repository/user_repository.dart';
+import 'package:storeapp/app/user/domain/use_case/get_users_use_case.dart';
+import 'package:storeapp/app/user/presentation/bloc/user_bloc.dart';
 
 final class DependencyInjection {
   DependencyInjection._();
@@ -66,9 +72,21 @@ final class DependencyInjection {
     //Feature
     //+core
     serviceLocator.registerFactory<SessionDatasource>(
-        () => SessionLocalDatasourceImpl(prefs: serviceLocator.get()));
-    serviceLocator.registerFactory<SessionRepository>(
-        () => SessionRepositoryImpl(sessionDatasource: serviceLocator.get()));
+      () => SessionFirebaseDatasourceImpl(
+        prefs: serviceLocator.get(),
+        firebaseAuth: serviceLocator.get(),
+      ),
+      instanceName: 'SessionFirebaseDatasourceImpl',
+    );
+/*    serviceLocator.registerFactory<SessionDatasource>(
+      () => SessionLocalDatasourceImpl(prefs: serviceLocator.get()),
+      instanceName: 'SessionLocalDatasourceImpl',
+    );*/
+    serviceLocator
+        .registerFactory<SessionRepository>(() => SessionRepositoryImpl(
+                sessionDatasource: serviceLocator.get(
+              instanceName: 'SessionFirebaseDatasourceImpl',
+            )));
     serviceLocator.registerFactory<LogoutUseCase>(
         () => LogoutUseCase(sessionRepository: serviceLocator.get()));
 
@@ -127,7 +145,7 @@ final class DependencyInjection {
       ),
     );
 
-    //+signup(register User)
+    //+Signup(register User)
     serviceLocator.registerFactory<SignupDatasource>(
       () => SignupFirebaseDatasourceImpl(
         userService: serviceLocator.get(),
@@ -147,6 +165,19 @@ final class DependencyInjection {
         () => CreateUserUseCase(signupRepository: serviceLocator.get()));
     serviceLocator.registerFactory<SignupBloc>(
       () => SignupBloc(createUserUseCase: serviceLocator.get()),
+    );
+
+    //+User (User list)
+    serviceLocator.registerFactory<UserDataSource>(
+        () => UserApiDataSourceImp(userService: serviceLocator.get()));
+    serviceLocator.registerFactory<UserRepository>(
+        () => UserRepositoryImp(userDataSource: serviceLocator.get()));
+    serviceLocator.registerFactory<GetUsersUseCase>(
+        () => GetUsersUseCase(userRepository: serviceLocator.get()));
+    serviceLocator.registerFactory<UserBloc>(
+      () => UserBloc(
+          getUsersUseCase: serviceLocator.get(),
+          logoutUseCase: serviceLocator.get()),
     );
   }
 }

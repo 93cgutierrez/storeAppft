@@ -27,7 +27,6 @@ class HomeApiDatasourceImpl implements HomeDataSource {
     } catch (e) {
       throw (Exception(e));
     }
-
     return products;
   }
 }

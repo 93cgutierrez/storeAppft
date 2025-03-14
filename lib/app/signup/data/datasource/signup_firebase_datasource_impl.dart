@@ -17,10 +17,13 @@ class SignupFirebaseDatasourceImpl implements SignupDatasource {
   @override
   Future<bool> createUser(UserEntity entity) async {
     try {
+      if (entity.password == null) {
+        throw Exception("Password is null");
+      }
       UserCredential userCredential =
           await firebaseAuth.createUserWithEmailAndPassword(
         email: entity.email,
-        password: entity.password,
+        password: entity.password ?? '',
       );
       final String savedId = userCredential.user?.uid ?? '';
       Log.d(_tag, "created account id: $savedId");

@@ -40,10 +40,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         newState = LoadDataState(model: state.model.copyWith(products: result));
       }
     } catch (e) {
+      Log.e(_tag, 'Error al obtener los productos $e');
       newState = HomeErrorState(
           model: state.model, message: "Error al obtener los productos");
     }
-
     emit(newState);
   }
 
@@ -75,7 +75,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     } catch (e) {
       newState = HomeErrorState(
           model: state.model, message: "Error al eliminar el producto");
-      print("😡 $e");
     }
     emit(newState);
   }

@@ -9,10 +9,9 @@ sealed class SignupState {
 final class SignupInitial extends SignupState {
   SignupInitial()
       : super(
-          model:
-              //TODO: TEMPORAL FOR TESTING
-              //ProfileModel.empty(),
-              ProfileModel(
+          model: ProfileModel.empty(),
+          //TODO: TEMPORAL FOR TESTING
+          /* ProfileModel(
             id: '',
             name: 'John Doe',
             document: '123456',
@@ -21,7 +20,7 @@ final class SignupInitial extends SignupState {
             confirmPassword: '456789',
             imageProfileUrl:
                 'https://static.vecteezy.com/system/resources/thumbnails/001/993/889/small_2x/beautiful-latin-woman-avatar-character-icon-free-vector.jpg',
-          ),
+          ),*/
         );
 }
 

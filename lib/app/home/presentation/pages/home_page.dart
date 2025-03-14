@@ -8,13 +8,13 @@ import 'package:storeapp/app/home/presentation/bloc/home_event.dart';
 import 'package:storeapp/app/home/presentation/bloc/home_state.dart';
 import 'package:storeapp/app/home/presentation/model/product_model.dart';
 import 'package:storeapp/app/login/presentation/page/login_page.dart';
+import 'package:storeapp/app/user/presentation/pages/users_page.dart';
 import 'package:storeapp/app/util/log.util.dart';
 
 const String _tag = 'HomePage';
 
 class HomePage extends StatelessWidget {
   static const String name = 'HomePage';
-  static const String _tag = name;
   static const String link = '/$name';
 
   const HomePage({super.key});
@@ -58,6 +58,18 @@ class AppBarWidget extends StatelessWidget {
       ),
       centerTitle: true,
       actions: [
+        IconButton(
+          onPressed: () async {
+            GoRouter.of(context).push(UsersPage.link);
+          },
+          icon: Icon(
+            Icons.people,
+            color: Colors.white,
+          ),
+        ),
+        SizedBox(
+          width: 4,
+        ),
         IconButton(
           onPressed: () async {
             showDialog(
@@ -156,7 +168,7 @@ class ProductListWidget extends StatelessWidget {
                         ),
                       ],
                     ));
-
+            break;
           case LogoutState():
             GoRouter.of(context).go(LoginPage.link);
         }

@@ -40,8 +40,6 @@ class _SignupPageState extends State<SignupPage> {
   void initState() {
     super.initState();
     Log.d(_tag, 'initState');
-    //load initial data
-    _loadInitialData();
   }
 
   //dispose
@@ -108,17 +106,6 @@ class _SignupPageState extends State<SignupPage> {
         ),
       ),
     );
-  }
-
-  void _loadInitialData() {
-    Log.d(_tag, '_loadInitialData');
-    //load initial data
-    //_nameController.text = 'John Doe';
-    //_documentController.text = '123456789';
-    //_emailController.text = 'john.doe@example.com';
-    //_passwordController.text = 'password';
-    //_confirmPasswordController.text = 'password';
-    _imageProfileUrlController.text = 'https://picsum.photos/600/700?random=1';
   }
 }
 

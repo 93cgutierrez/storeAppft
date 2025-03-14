@@ -5,7 +5,7 @@ class UserDataModel {
   late final String name;
   late final String document;
   late final String email;
-  late final String password;
+  String? password;
   late final String imageProfileUrl;
 
   UserDataModel({
@@ -22,8 +22,8 @@ class UserDataModel {
     name = json['name'];
     document = json['document'];
     email = json['email'];
-    password = json['password'];
-    imageProfileUrl = json['image'];
+    //password = json['password'];
+    imageProfileUrl = json['imageProfileUrl'];
   }
 
   //toEntity

@@ -1,1 +1,5 @@
-abstract class UserRepository {}
+import 'package:storeapp/app/core/domain/entity/user_entity.dart';
+
+abstract class UserRepository {
+  Future<List<UserEntity>> getUsers();
+}

@@ -12,11 +12,11 @@ final class InitialState extends LoginState {
   InitialState()
       : super(
           model: LoginFormModel(
+            email: '',
+            password: '',
             //TODO: TEMPORAL FOR TESTING
-/*            email: '',
-            password: '',*/
-            email: 'iooo@gmail.com',
-            password: '456789',
+/*            email: 'iooo@gmail.com',
+            password: '456789',*/
           ),
         );
 }

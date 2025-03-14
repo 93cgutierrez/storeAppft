@@ -6,7 +6,7 @@ import 'package:storeapp/app/util/log.util.dart';
 import 'package:storeapp/app/util/parameters.dart';
 
 class LoginFirebaseDatasourceImpl implements LoginDatasource {
-  static const String _tag = 'LoginFirebaseDatasource';
+  static const String _tag = 'LoginFirebaseDatasourceImpl';
   final SharedPreferences prefs;
   final FirebaseAuth firebaseAuth;
 
