@@ -7,6 +7,7 @@ final class ProductService {
   static const String _tag = 'ProductService';
   final Dio apiClient;
   final String baseUrl = Parameters.baseUrl;
+  final String productsName = Parameters.productsName;
 
   ProductService({
     required this.apiClient,
@@ -16,7 +17,8 @@ final class ProductService {
   Future<List<ProductDataModel>> getAll() async {
     List<ProductDataModel> products = [];
     try {
-      final Response response = await apiClient.get('$baseUrl/products.json');
+      final Response response =
+          await apiClient.get('$baseUrl/$productsName.json');
       if (response.statusCode == 200 && response.data != null) {
         response.data.forEach((key, value) {
           products.add(ProductDataModel.fromJson(key, value));
@@ -37,7 +39,7 @@ final class ProductService {
   Future<bool> delete(String productId) async {
     try {
       final Response response =
-          await apiClient.delete('$baseUrl/products/$productId.json');
+          await apiClient.delete('$baseUrl/$productsName/$productId.json');
       if (response.statusCode == 200) {
         Log.i(_tag, 'Producto eliminado exitosamente');
         return true;
@@ -55,7 +57,7 @@ final class ProductService {
   Future<bool> add(ProductDataModel product) async {
     try {
       final Response response = await apiClient.post(
-        '$baseUrl/products.json',
+        '$baseUrl/$productsName.json',
         data: product.toJson(),
       );
       if (response.statusCode == 200) {
@@ -75,7 +77,7 @@ final class ProductService {
   Future<ProductDataModel> get(String productId) async {
     try {
       final Response response =
-          await apiClient.get('$baseUrl/products/$productId.json');
+          await apiClient.get('$baseUrl/$productsName/$productId.json');
       if (response.statusCode == 200 && response.data != null) {
         return ProductDataModel.fromJson(productId, response.data);
       } else {
@@ -92,7 +94,7 @@ final class ProductService {
   Future<bool> update(ProductDataModel product) async {
     try {
       final Response response = await apiClient.patch(
-        '$baseUrl/products/${product.id}.json',
+        '$baseUrl/$productsName/${product.id}.json',
         data: product.toJson(),
       );
       if (response.statusCode == 200) {

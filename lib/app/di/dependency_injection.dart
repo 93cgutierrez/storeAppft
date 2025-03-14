@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
@@ -30,13 +31,13 @@ import 'package:storeapp/app/login/domain/datasource/login_datasource.dart';
 import 'package:storeapp/app/login/domain/repository/login_repository.dart';
 import 'package:storeapp/app/login/domain/use_case/login_use_case.dart';
 import 'package:storeapp/app/login/presentation/bloc/login_bloc.dart';
-import 'package:storeapp/app/signup/data/datasource/signup_firebase_datasource_impl.dart';
+import 'package:storeapp/app/signup/data/datasource/signup_firestore_datasource_impl.dart';
 import 'package:storeapp/app/signup/data/respository/signup_repository_impl.dart';
 import 'package:storeapp/app/signup/domain/datasource/signup_datasource.dart';
 import 'package:storeapp/app/signup/domain/repository/signup_repository.dart';
 import 'package:storeapp/app/signup/domain/use_case/create_user_use_case.dart';
 import 'package:storeapp/app/signup/presentation/bloc/signup_bloc.dart';
-import 'package:storeapp/app/user/data/datasource/user_api_datasource_impl.dart';
+import 'package:storeapp/app/user/data/datasource/user_firestore_datasource_impl.dart';
 import 'package:storeapp/app/user/data/repository/user_repository_imp.dart';
 import 'package:storeapp/app/user/domain/datasource/user_datasource.dart';
 import 'package:storeapp/app/user/domain/repository/user_repository.dart';
@@ -49,7 +50,8 @@ final class DependencyInjection {
   static final GetIt serviceLocator = GetIt.instance;
 
   static Future<void> setup({
-    required FirebaseAuth instance,
+    required FirebaseAuth firebaseAuth,
+    required FirebaseFirestore firebaseFirestore,
     required SharedPreferences prefs,
   }) async {
     //SharedPreferences
@@ -57,7 +59,9 @@ final class DependencyInjection {
 
     //Firebase
     //+Authentication
-    serviceLocator.registerSingleton<FirebaseAuth>(instance);
+    serviceLocator.registerSingleton<FirebaseAuth>(firebaseAuth);
+    //+Firestore database
+    serviceLocator.registerSingleton<FirebaseFirestore>(firebaseFirestore);
 
     //Service
     //+Dio
@@ -147,19 +151,26 @@ final class DependencyInjection {
 
     //+Signup(register User)
     serviceLocator.registerFactory<SignupDatasource>(
+      () => SignupFirestoreDatasourceImpl(
+        firebaseFirestore: serviceLocator.get(),
+        firebaseAuth: serviceLocator.get(),
+      ),
+      instanceName: 'SignupFirestoreDatasourceImpl',
+    );
+/*    serviceLocator.registerFactory<SignupDatasource>(
       () => SignupFirebaseDatasourceImpl(
         userService: serviceLocator.get(),
         firebaseAuth: serviceLocator.get(),
       ),
       instanceName: 'SignupFirebaseDatasourceImpl',
-    );
+    );*/
 /*    serviceLocator.registerFactory<SignupDatasource>(
       () => SignupApiDatasourceImpl(userService: serviceLocator.get()),
       instanceName: 'SignupApiDatasourceImpl',
     );*/
     serviceLocator.registerFactory<SignupRepository>(() => SignUpRepositoryImpl(
             signupDatasource: serviceLocator.get(
-          instanceName: 'SignupFirebaseDatasourceImpl',
+          instanceName: 'SignupFirestoreDatasourceImpl',
         )));
     serviceLocator.registerFactory<CreateUserUseCase>(
         () => CreateUserUseCase(signupRepository: serviceLocator.get()));
@@ -168,10 +179,18 @@ final class DependencyInjection {
     );
 
     //+User (User list)
+/*    serviceLocator.registerFactory<UserDataSource>(
+      () => UserApiDataSourceImp(userService: serviceLocator.get()),
+      instanceName: 'UserApiDataSourceImp',
+    );*/
     serviceLocator.registerFactory<UserDataSource>(
-        () => UserApiDataSourceImp(userService: serviceLocator.get()));
-    serviceLocator.registerFactory<UserRepository>(
-        () => UserRepositoryImp(userDataSource: serviceLocator.get()));
+      () => UserFirestoreDataSourceImp(firebaseFirestore: serviceLocator.get()),
+      instanceName: 'UserFirestoreDataSourceImp',
+    );
+    serviceLocator.registerFactory<UserRepository>(() => UserRepositoryImp(
+            userDataSource: serviceLocator.get(
+          instanceName: 'UserFirestoreDataSourceImp',
+        )));
     serviceLocator.registerFactory<GetUsersUseCase>(
         () => GetUsersUseCase(userRepository: serviceLocator.get()));
     serviceLocator.registerFactory<UserBloc>(

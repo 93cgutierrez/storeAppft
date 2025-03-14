@@ -7,6 +7,7 @@ final class UserService {
   static const String _tag = 'UserService';
   final Dio apiClient;
   final String baseUrl = Parameters.baseUrl;
+  final String usersName = Parameters.usersName;
 
   UserService({
     required this.apiClient,
@@ -16,7 +17,7 @@ final class UserService {
   Future<bool> create(UserDataModel user) async {
     try {
       final Response response = await apiClient.post(
-        '$baseUrl/users.json',
+        '$baseUrl/$usersName.json',
         data: user.toJson(),
         options: Options(
           headers: {
@@ -42,7 +43,7 @@ final class UserService {
   Future<List<UserDataModel>> getAll() async {
     List<UserDataModel> users = [];
     try {
-      final Response response = await apiClient.get('$baseUrl/users.json');
+      final Response response = await apiClient.get('$baseUrl/$usersName.json');
       if (response.statusCode == 200) {
         response.data.forEach((key, value) {
           users.add(UserDataModel.fromJson(key, value));

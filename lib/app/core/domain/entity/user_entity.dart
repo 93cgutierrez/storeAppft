@@ -29,6 +29,30 @@ class UserEntity {
     );
   }
 
+  //fromJson
+  factory UserEntity.fromJson(String id, Map<String, dynamic> json) {
+    return UserEntity(
+      id: id,
+      name: json['name'],
+      document: json['document'],
+      email: json['email'],
+      password: json['password'] ?? '',
+      imageProfileUrl: json['imageProfileUrl'] ?? '',
+    );
+  }
+
+  //toMap
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'name': name,
+      'document': document,
+      'email': email,
+      //'password': password ?? '',
+      'imageProfileUrl': imageProfileUrl,
+    };
+  }
+
   //copyWith
   UserEntity copyWith({
     String? id,

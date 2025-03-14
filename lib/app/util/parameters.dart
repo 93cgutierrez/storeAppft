@@ -4,4 +4,6 @@ class Parameters {
 
   static String baseUrl =
       'https://especializacion-mobile-default-rtdb.firebaseio.com';
+  static String usersName = 'users';
+  static String productsName = 'products';
 }

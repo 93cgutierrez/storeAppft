@@ -111,6 +111,12 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
           success: success,
         );
         emit(newState);
+        Log.d(_tag, 'User created successfully');
+        //clean model
+        final DataUpdatedState newState2 = DataUpdatedState(
+          model: ProfileModel.empty(),
+        );
+        emit(newState2);
       } else {
         final SignUpErrorState newState = SignUpErrorState(
           model: state.model,
