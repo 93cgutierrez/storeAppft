@@ -132,14 +132,11 @@ class FabWidget extends StatelessWidget {
 }
 
 class ProductListWidget extends StatelessWidget {
-  const ProductListWidget({
-    super.key,
-  });
+  const ProductListWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
     final HomeBloc bloc = context.read<HomeBloc>();
-    //getProducts
     bloc.add(GetProductsEvent());
     return BlocConsumer<HomeBloc, HomeState>(
       listener: (context, state) {
@@ -176,22 +173,25 @@ class ProductListWidget extends StatelessWidget {
       builder: (context, state) {
         switch (state) {
           case LoadingState():
-            return Center(
+            return const Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 spacing: 20.0,
                 children: [
                   CircularProgressIndicator(),
-                  Text(state.message),
+                  Text('Cargando productos...'),
                 ],
               ),
             );
           case EmptyState():
-            return Center(
+            return const Center(
               child: Text('No hay productos'),
             );
           case LoadDataState():
-            return ListView.builder(
+            return GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+              ),
               itemCount: state.model.products.length,
               itemBuilder: (context, index) => ProductItemWidget(
                 index: index,
@@ -199,7 +199,7 @@ class ProductListWidget extends StatelessWidget {
               ),
             );
           default:
-            return Container();
+            return const Center(child: Text("no hay productos"));
         }
       },
     );
@@ -210,11 +210,8 @@ class ProductItemWidget extends StatelessWidget {
   final int index;
   final ProductModel product;
 
-  const ProductItemWidget({
-    super.key,
-    required this.index,
-    required this.product,
-  });
+  const ProductItemWidget(
+      {super.key, required this.index, required this.product});
 
   @override
   Widget build(BuildContext context) {
@@ -233,86 +230,76 @@ class ProductItemWidget extends StatelessWidget {
         _buildShowDialog(context, bloc);
       },
       child: Card(
-        color: Colors.white54,
-        child: SizedBox(
-          height: 150.0,
-          child: Row(
-            spacing: 4.0,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  color: Colors.transparent,
-                  width: 100.0,
-                  height: 100.0,
-                  child: CircleAvatar(
-                    backgroundImage: NetworkImage(
-                      product.urlImage,
-                    ),
-                  ),
+        elevation: 4,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        clipBehavior: Clip.antiAlias,
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            Image.network(product.urlImage, fit: BoxFit.cover),
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Colors.black.withOpacity(0.4), Colors.transparent],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
                 ),
               ),
-              SizedBox(height: 8),
-              Expanded(
-                child: SizedBox(
-                  width: 150.0,
-                  child: Column(
-                    spacing: 8.0,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Text(
-                        product.name,
-                        style: TextStyle(
-                          color: Colors.blue,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        '\$ ${product.price}',
-                        style: TextStyle(
-                          color: Colors.blue,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(width: 8),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            ),
+            Container(
+              alignment: Alignment.topCenter,
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  IconButton(
-                    onPressed: () {
-                      //showDialog
-                      _buildShowDialog(context, bloc);
-                    },
-                    icon: Icon(
-                      Icons.delete,
-                      color: Colors.red,
+                  Text(
+                    product.name,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
                     ),
+                    textAlign: TextAlign.center,
                   ),
-                  IconButton(
-                    onPressed: () {
-                      GoRouter.of(context).pushNamed(
-                        FormProductPage.nameUpdate,
-                        pathParameters: {
-                          FormProductPage.idKey: product.id,
-                        },
-                      );
-                    },
-                    icon: Icon(
-                      Icons.edit,
-                      color: Colors.blue,
-                    ),
+                  Text(
+                    '\$ ${product.price}',
+                    style: const TextStyle(color: Colors.white),
+                    textAlign: TextAlign.center,
                   ),
                 ],
               ),
-              SizedBox(width: 8),
-            ],
-          ),
+            ),
+            Align(
+              alignment: Alignment.bottomLeft,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: IconButton(
+                  onPressed: () {
+                    _buildShowDialog(context, bloc);
+                  },
+                  icon: const Icon(Icons.delete, color: Colors.red),
+                ),
+              ),
+            ),
+            Align(
+              alignment: Alignment.bottomRight,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: IconButton(
+                  onPressed: () {
+                    GoRouter.of(context).pushNamed(
+                      FormProductPage.nameUpdate,
+                      pathParameters: {
+                        FormProductPage.idKey: product.id,
+                      },
+                    );
+                  },
+                  icon: const Icon(Icons.edit, color: Colors.blue),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -322,27 +309,20 @@ class ProductItemWidget extends StatelessWidget {
     return showDialog(
       context: context,
       builder: (BuildContext context) => AlertDialog(
-        title: const Text(
-          'Eliminar producto',
-        ),
-        content: Text(
-          '¿Desea eliminar el producto ${product.name}?',
-        ),
+        title: const Text('Eliminar producto'),
+        content: Text('¿Desea eliminar el producto ${product.name}?'),
         actions: <Widget>[
           TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
+            onPressed: () => Navigator.of(context).pop(),
             child: const Text('Cancelar'),
           ),
           TextButton(
             onPressed: () {
-              //TODO: VALIDATE WITH ORIGINAL CODE
               bloc.add(DeleteProductEvent(id: product.id));
               Navigator.of(context).pop();
             },
             child: const Text('Eliminar'),
-          )
+          ),
         ],
       ),
     );
